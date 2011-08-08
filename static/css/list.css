@@ -1,0 +1,22 @@
+div.list {
+    padding-bottom: 10px;
+}
+
+table.list td {
+    padding-right: 10px;
+    border-right: 1px;
+    border-style: solid;
+}
+
+ul.pages {
+    display: block;
+    padding-top: 2px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+}
+
+ul.pages li {
+    display: inline-block;
+    height: 25px;
+    padding-right: 2px;
+}

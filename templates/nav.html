@@ -1,0 +1,13 @@
+{% load i18n %}
+<ul class="nav">
+<li><a href="{%url game_list 1 %}">Games</a></li>
+{% if user.is_authenticated %}
+<li><a href="{% url registration.views.profile %}">{% trans "Profile" %} [{{ user }}]</a></li>
+{% comment %}<li><a href="{% url gamemanager.views.gamelist %}">{% trans "Characters" %}</a></li>{% endcomment %}
+{% comment %}<li><a href="{% url gamemanager.views.gamelist %}">{% trans "Messages" %}</a></li>{% endcomment %}
+<li><a href="{% url django.contrib.auth.views.logout %}">{% trans "Logout" %}</a></li>
+{% else %}
+<li><a href="{% url django.contrib.auth.views.login %}">{% trans "Login" %}</a></li>
+<li><a href="{% url registration.views.register %}">{% trans "Register" %}</a></li>
+{% endif %}
+</ul>

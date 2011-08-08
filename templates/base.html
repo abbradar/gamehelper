@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>{% block title %}{% endblock %} - gamemanager</title>
+<link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css" />
+{% block head %}{% endblock %}
+</head>
+<body>
+<header>
+{% include 'header.html' %}
+{% include 'nav.html' %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+</header>
+<article>
+{% block body %}{% endblock %}
+</article>
+<footer>
+{% include 'footer.html' %}
+</footer>
+</body>
+</html>

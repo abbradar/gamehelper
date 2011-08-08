@@ -1,0 +1,7 @@
+{% extends 'form.html' %}
+{% load i18n %}
+{% block title %}{% trans "Registration" %}{% endblock %}
+{% block form_footer %}
+<input type="submit" value="{% trans "Register" %}" />
+<input type="hidden" name="next" value="{{ next|escape }}" />
+{% endblock %}

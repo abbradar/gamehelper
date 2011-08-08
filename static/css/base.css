@@ -1,0 +1,30 @@
+div.header {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+ul.nav {
+    display: block;
+    padding-bottom: 10px;
+    padding-left: 0px;
+}
+
+ul.nav li {
+    display: inline-block;
+    min-width: 60px;
+    height: 25px;
+    text-align: center;
+    border: 1px;
+    border-style: solid;
+}
+
+div.footer {
+    font-style: italic;
+}
+
+article {
+    border: 0px;
+    border-top: 2px;
+    border-bottom: 2px;
+    border-style: groove;
+}

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block body %}
+<form action="" method="post">
+{{ form.as_p }}
+{% block form_footer %}{% endblock %}
+{% csrf_token %}
+</form>
+{% endblock %}

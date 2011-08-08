@@ -1,0 +1,12 @@
+{% extends 'list.html' %}
+{% load i18n %}
+{% block title %}{% trans "Games" %}{% endblock %}
+{% block list_header %}
+<th>{% trans "Name" %}</th>
+<th>{% trans "Creation date" %}</th>
+{% endblock %}
+{% block list_item %}
+<td><a href="{% url game_detail object.id %}">{{ object }}</a></td>
+<td>{{ object.creation_date }}</td>
+{% endblock %}
+{% block empty_list %}{% trans "No games avaliable" %}{% endblock %}
