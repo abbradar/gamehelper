@@ -1,12 +1,16 @@
 {% extends 'list.html' %}
 {% load i18n %}
 {% block title %}{% trans "Games" %}{% endblock %}
+{% block nav2 %}
+{% if can_create %}<li><a href="{% url game_create %}">{% trans "Create" %}</a></li>{% endif %}
+{% endblock %}
 {% block list_header %}
 <th>{% trans "Name" %}</th>
 <th>{% trans "Creation date" %}</th>
 {% endblock %}
 {% block list_item %}
-<td><a href="{% url game_detail object.id %}">{{ object }}</a></td>
+<td><a href="{{ object.get_absolute_url }}">{{ object }}</a></td>
 <td>{{ object.creation_date }}</td>
 {% endblock %}
 {% block empty_list %}{% trans "No games avaliable" %}{% endblock %}
+{% block page_link %}{% url "game_list" page=page %}{% endblock %}

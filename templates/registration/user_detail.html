@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %}{% trans "Profile" %} [{{ object }}]{% endblock %}
-{% block body %}
+{% block main %}
 {% ifequal object user %}
 <p>It's me!</p>
 {% endifequal %}
-<p>{% trans "Name" %}: {{ object }}</p>
+<p>{% trans "Name" %}: {{ object.username }}</p>
 <p>{% trans "Creation date" %}: {{ object.date_joined }}</p>
 {% endblock %}

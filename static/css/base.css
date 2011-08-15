@@ -1,30 +1,52 @@
-div.header {
+.header {
     font-size: 30px;
     font-weight: bold;
+    margin-bottom: 4px;
 }
 
-ul.nav {
+.nav, .nav2 {
     display: block;
-    padding-bottom: 10px;
-    padding-left: 0px;
+    padding: 0px;
+    margin: 0px;
 }
 
-ul.nav li {
+.nav {
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    border: 0px;
+    border-bottom: 2px;
+    border-style: groove;
+}
+
+ul.nav li, ul.nav2 li {
     display: inline-block;
     min-width: 60px;
     height: 25px;
     text-align: center;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+ul.nav li {
     border: 1px;
     border-style: solid;
 }
 
-div.footer {
+.nav3 {
+    display: block;
+    position: absolute;
+    right: 0px;
+    border: 0px;
+    border-left: 2px;
+    border-style: groove;
+}
+
+.footer {
     font-style: italic;
 }
 
-article {
+.container {
     border: 0px;
-    border-top: 2px;
     border-bottom: 2px;
     border-style: groove;
 }

@@ -1,12 +1,10 @@
 from django.conf.urls.defaults import patterns, url
-from django.views.generic.simple import redirect_to
-from django.views.generic.list_detail import object_list, object_detail
-from gamemanager import models
+from gamemanager import views
+from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
-    url(r'^$', redirect_to, {'url': 'games/list/'}),
-    url(r'^games/list/$', object_list, {'queryset': models.Game.objects.all()}, name='game_list'),
-    url(r'^games/list/(?P<page>(?:\d+|last))$', object_list, {'queryset': models.Game.objects.all()}, name='game_list'),
-    url(r'^games/(?P<object_id>\d+)$', object_detail, {'queryset': models.Game.objects.all()}, name='game_detail'),
-    url(r'^character/(?P<object_id>\d+)$', object_detail, {'queryset': models.Character.objects.all()}, name='character_detail'),
+    url(r'^$', RedirectView.as_view(url="/games/list/")),
+    url(r'^games/list/(?P<page>\d+|last)?$', views.GameListView.as_view(), name='game_list'),
+    url(r'^games/detail/(?P<pk>\d+)$', views.GameDetailView.as_view(), name='game_detail'),
+    url(r'^games/create/$', views.GameCreateView.as_view(success_url="/games/detail/%(id)"), name='game_create'),
 )

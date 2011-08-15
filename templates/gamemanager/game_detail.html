@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %}{% trans "Game" %} [{{ object }}]{% endblock %}
-{% block body %}
+{% block main %}
 <p>{% trans "Name" %}: {{ object }}</p>
 <p>{% trans "Creation date" %}: {{ object.creation_date }}</p>
+<p>{% trans "Public description" %}: {{ object.public_description }}</p>
+{% if view_protected %}
+<p>{% trans "Protected description" %}: {{ object.protected_description }}</p>
+{% endif %}
 {% endblock %}

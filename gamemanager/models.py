@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
+from gamemanager.game_types import GAME_CLASSES_CHOICES
 
 class Message(models.Model):
     sender = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='message_sender')
@@ -16,7 +16,7 @@ class Game(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
     public_description = models.TextField(verbose_name=_('Public description'))
     protected_description = models.TextField(verbose_name=_('Protected description'))
-    #type = models.TextField(verbose_name=_('Type'), max_length=80)
+    type = models.TextField(verbose_name=_('Type'), max_length=80, choices=GAME_CLASSES_CHOICES)
     creation_date = models.DateTimeField(auto_now_add=True)
     last_active = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(verbose_name=_('Active'), default=True)
@@ -24,16 +24,26 @@ class Game(models.Model):
     def __unicode__(self):
         return self.name
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('game_detail', (), {'pk': self.id})
+    
     class Meta:
         verbose_name = _('Game')
         verbose_name_plural = _('Games')
+        permissions = (
+            ('view_protected', 'Can view protected fields'),
+        )
 
 class GameUser(models.Model):
     master = models.ForeignKey(User)
     game = models.ForeignKey(Game, null=True, on_delete=models.SET_NULL)
     notes = models.TextField()
-    is_character = models.BooleanField()
-    is_gamemaster = models.BooleanField()
+    
+    class Meta:
+        permissions = (
+            ('view_protected', 'Can view protected fields'),
+        )
 
 class GameMessage(Message):
     game_sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='message_sender')

@@ -2,14 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>{% block title %}{% endblock %} - gamemanager</title>
+<title>{% block title %}{% endblock %} - RPG Helper</title>
 <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css" />
 {% block head %}{% endblock %}
 </head>
 <body>
-<header>
 {% include 'header.html' %}
 {% include 'nav.html' %}
+<div class="container">
+<ul class="nav2">
+{% block nav2 %}{% endblock %}
+</ul>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -17,12 +20,13 @@
     {% endfor %}
 </ul>
 {% endif %}
-</header>
-<article>
-{% block body %}{% endblock %}
-</article>
-<footer>
+<div class="right">
+{% block right %}{% endblock %}
+</div>
+<div class="article">
+{% block main %}{% endblock %}
+</div>
+</div>
 {% include 'footer.html' %}
-</footer>
 </body>
 </html>

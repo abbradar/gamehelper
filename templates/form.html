@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
-{% block body %}
+{% load i18n %}
+{% block main %}
 <form action="" method="post">
 {{ form.as_p }}
-{% block form_footer %}{% endblock %}
+{% block form_footer %}
+<input type="submit" value="{% trans "Submit" %}" />
+{% endblock %}
 {% csrf_token %}
 </form>
 {% endblock %}
