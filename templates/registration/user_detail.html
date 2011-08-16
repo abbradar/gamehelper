@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Profile" %} [{{ object }}]{% endblock %}
+{% block title %}{% trans "Profile" %} [{{ current_user.username }}]{% endblock %}
+{% block nav2 %}
+{% ifequal current_user user %}
+<li><a href="{% url user_detail "me" %}">{% trans "Summary" %}</a></li>
+<li><a href="{% url user_change %}">{% trans "Profile change" %}</a></li>
+<li><a href="{% url password_change %}">{% trans "Password change" %}</a></li>
+{% else %}
+<li><a href="{% url user_detail current_user.id %}">{% trans "Summary" %}</a></li>
+{% endifequal %}
+{% endblock %}
 {% block main %}
-{% ifequal object user %}
+{% ifequal current_user user %}
 <p>It's me!</p>
 {% endifequal %}
-<p>{% trans "Name" %}: {{ object.username }}</p>
-<p>{% trans "Creation date" %}: {{ object.date_joined }}</p>
+<p>{% trans "User name" %}: {{ current_user.username }}</p>
+<p>{% trans "Full name" %}: {{ current_user.get_full_name }}</p>
+<p>{% trans "Date joined" %}: {{ current_user.date_joined }}</p>
 {% endblock %}

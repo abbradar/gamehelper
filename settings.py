@@ -154,5 +154,7 @@ LOGGING = {
     }
 }
 
-GAME_CLASSES = {
+LOGIN_REDIRECT_URL = "/"
+
+GAME_TYPE_CLASSES = {
 }
