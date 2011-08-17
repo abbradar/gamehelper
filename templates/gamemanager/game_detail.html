@@ -4,8 +4,20 @@
 {% block main %}
 <p>{% trans "Name" %}: {{ object }}</p>
 <p>{% trans "Creation date" %}: {{ object.creation_date }}</p>
-<p>{% trans "Public description" %}: {{ object.public_description }}</p>
+<p>{% trans "Description" %}: {{ object.description }}</p>
 {% if view_protected %}
-<p>{% trans "Protected description" %}: {{ object.protected_description }}</p>
 {% endif %}
+{% endblock %}
+{% block right %}
+{% if my_gm %}
+<p><b>You are GM there!</b></p>
+{% endif %}
+<p>{% trans "Game masters" %}:</p>
+<ul>
+{% for gm in game_masters %}
+<li><a href="{{ gm.master.get_profile.get_absolute_url }}">{{ gm.master.username }}</a></li>
+{% empty %}
+<p>{% trans "No game masters assigned to game" %}</p>
+{% endfor %}
+</ul>
 {% endblock %}

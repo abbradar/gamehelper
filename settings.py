@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'django.contrib.comments',
+    'gamehelper.registration',
     'gamehelper.gamemanager',
 )
 
@@ -154,7 +155,10 @@ LOGGING = {
     }
 }
 
+AUTH_PROFILE_MODULE = 'registration.UserProfile'
+
 LOGIN_REDIRECT_URL = "/"
 
-GAME_TYPE_CLASSES = {
-}
+GAME_TYPE_CLASSES = (
+    'gamemanager.game_types.GameType',
+)

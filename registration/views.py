@@ -1,10 +1,14 @@
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from django.views.generic import DetailView
-from django.views.generic.edit import CreateView, UpdateView, ModelFormMixin
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
+from django.views.generic.edit import ModelFormMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from registration.forms import UserUpdateForm
+from .forms import UserUpdateForm
+
+class UserListView(ListView):
+    model = User
+    template_name = 'registration/user_list.html'
 
 class UserCreateView(CreateView):
     model = User
@@ -45,9 +49,10 @@ class UserPasswordChangeView(UserPrivateView):
     form_class = PasswordChangeForm
     template_name = 'registration/user_password_change.html'
     
-    # not so beautiful as it should be - blame PasswordChangeForm being not ModelForm    
+    # not so beautiful as it should be - blame PasswordChangeForm being not ModelForm
+    # (we should not send 'instance' to form, and instead send object there)
     def get_form(self, form_class):
         return form_class(self.get_object(), **self.get_form_kwargs())
     
-   def get_form_kwargs(self):
+    def get_form_kwargs(self):
         return super(ModelFormMixin, self).get_form_kwargs()

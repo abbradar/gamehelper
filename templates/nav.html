@@ -1,6 +1,7 @@
 {% load i18n %}
 <ul class="nav">
 <li><a href="{%url game_list %}">Games</a></li>
+<li><a href="{%url user_list %}">Users</a></li>
 {% if user.is_authenticated %}
 <li><a href="{% url user_detail "me" %}">{% trans "Profile" %} [{{ user.username }}]</a></li>
 <li><a href="{% url logout %}">{% trans "Logout" %}</a></li>

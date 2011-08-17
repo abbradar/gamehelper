@@ -1,22 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from gamemanager.game_types import get_game_type_choices
 
-class Message(models.Model):
+class Text(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     subject = models.CharField(max_length=100)
     text = models.TextField()
+    
+    class Meta:
+        get_latest_by = "timestamp"
+        ordering = ['-timestamp']
 
-class PrivateMessage(Message):
-    sender = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='private_sender')
-    receiver = models.ForeignKey(User, related_name='private_receiver')
+class Message(Text):
+    sender = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='message_sender')
+    receiver = models.ForeignKey(User, related_name='message_receiver')
 
 class Game(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
-    public_description = models.TextField(verbose_name=_('Public description'))
-    protected_description = models.TextField(verbose_name=_('Protected description'))
-    type = models.TextField(verbose_name=_('Type'), max_length=80, choices=get_game_type_choices())
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    type = models.TextField(verbose_name=_('Type'), max_length=30, editable=False)
     creation_date = models.DateTimeField(auto_now_add=True)
     last_active = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(verbose_name=_('Active'), default=True)
@@ -34,29 +36,29 @@ class Game(models.Model):
         permissions = (
             ('view_protected', 'Can view protected fields'),
         )
+        get_latest_by = "creation_date"
+        ordering = ['-last_active']
 
 class GameUser(models.Model):
     master = models.ForeignKey(User)
     game = models.ForeignKey(Game, null=True, on_delete=models.SET_NULL)
-    notes = models.TextField()
     
     class Meta:
         permissions = (
             ('view_protected', 'Can view protected fields'),
         )
 
-class PublicGameMessage(Message):
-    sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='publicgame_sender')
+class Post(Text):
+    sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='post_sender')
     game = models.ForeignKey(Game)
 
-class PrivateGameMessage(Message):
-    sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='privategame_sender')
-    receiver = models.ForeignKey(GameUser, related_name='privategame_receiver')
+class GameMessage(Text):
+    sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='gamemessage_sender')
+    receiver = models.ForeignKey(GameUser, related_name='gamemessage_receiver')
 
 class Character(GameUser):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
-    public_description = models.TextField(verbose_name=_('Public description'))
-    protected_description = models.TextField(verbose_name=_('Protected description'))
+    description = models.TextField(verbose_name=_('Description'))
     
     def __unicode__(self):
         return self.name
@@ -66,4 +68,4 @@ class Character(GameUser):
         verbose_name_plural = _('Characters')
 
 class GameMaster(GameUser):
-    name = models.CharField(max_length=30)
+    pass

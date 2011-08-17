@@ -1,0 +1,15 @@
+{% extends 'list.html' %}
+{% load i18n %}
+{% block title %}{% trans "Users" %}{% endblock %}
+{% block list_header %}
+<th>{% trans "User name" %}</th>
+<th>{% trans "Full name" %}</th>
+<th>{% trans "Date joined" %}</th>
+{% endblock %}
+{% block list_item %}
+<td><a href="{{ object.get_profile.get_absolute_url }}">{{ object.username }}</a></td>
+<td>{{ object.get_full_name }}</td>
+<td>{{ object.date_joined }}</td>
+{% endblock %}
+{% block empty_list %}{% trans "No users exist" %}{% endblock %}
+{% block page_link %}{% url "user_list" page=page %}{% endblock %}

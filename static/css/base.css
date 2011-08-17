@@ -32,10 +32,17 @@ ul.nav li {
     border-style: solid;
 }
 
-.nav3 {
+.article {
+    display: block;
+    position: relative;
+    top: 0px;
+    left: 10px;
+}
+
+.right {
     display: block;
     position: absolute;
-    right: 0px;
+    right: 10px;
     border: 0px;
     border-left: 2px;
     border-style: groove;
@@ -49,4 +56,5 @@ ul.nav li {
     border: 0px;
     border-bottom: 2px;
     border-style: groove;
+    
 }
