@@ -1,0 +1,8 @@
+[patterns]
+**.py = native
+**.html = native
+**.css = native
+**.txt = native
+
+[repository]
+native = LF
