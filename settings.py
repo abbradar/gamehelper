@@ -14,7 +14,7 @@ import os.path
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(os.path.dirname(__file__), 'database.db').replace('\\','/'),                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(os.path.dirname(__file__), 'database.db').replace('\\','/'), # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -33,7 +33,7 @@ TIME_ZONE = 'Europe/Moscow'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'ru-RU'
 
 SITE_ID = 1
 
@@ -100,7 +100,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'gamehelper.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -121,8 +121,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'django.contrib.comments',
-    'gamehelper.registration',
-    'gamehelper.gamemanager',
+    'registration',
+    'gamemanager',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -162,3 +162,5 @@ LOGIN_REDIRECT_URL = "/"
 GAME_TYPE_CLASSES = (
     'gamemanager.game_types.GameType',
 )
+
+ROOT_URL = ""

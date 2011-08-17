@@ -4,7 +4,7 @@ from django.views.generic import CreateView
 from django.utils.translation import ugettext as _
 from django.utils.functional import LazyObject
 from django.forms import Form, ChoiceField
-from .utils import get_class
+from utils import get_class
 from .forms import GameCreateForm
 
 # very, VERY awful place - lots of circular dependencies right here
