@@ -5,7 +5,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
     url(r'^list/$', views.GameListView.as_view(), name='game_list'),
-    url(r'^detail/(?P<pk>\d+)/$', views.GameDetailView.as_view(), name='game_detail'),
+    url(r'^news/(?P<game_pk>\d+)/$', views.GameNewsListView.as_view(), name='game_news'),
+    url(r'^update/(?P<game_pk>\d+)/$', views.GameUpdateView.as_view(success_url=abs_url("/games/news/%(id)i/")), name='game_update'),
     url(r'^create/$', views.GameTypeView.as_view(success_url=abs_url("/games/create/%(type)s/")), name='game_create'),
-    url(r'^create/(?P<type>\w+(?:\.\w+)*)/$', views.GameCreateView.as_view(success_url=abs_url("/games/detail/%(id)i/"))),
+    url(r'^create/(?P<type>\w+(?:\.\w+)*)/$', views.GameCreateView.as_view(success_url=abs_url("/games/news/%(id)i/"))),
 )

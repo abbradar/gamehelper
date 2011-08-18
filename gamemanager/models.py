@@ -28,7 +28,7 @@ class Game(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('game_detail', (), {'pk': self.id})
+        return ('game_news', (), {'game_pk': self.id})
     
     class Meta:
         verbose_name = _('Game')
@@ -51,6 +51,7 @@ class GameUser(models.Model):
 class Post(Text):
     sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='post_sender')
     game = models.ForeignKey(Game)
+    type = models.CharField(max_length=10)
 
 class GameMessage(Text):
     sender = models.ForeignKey(GameUser, null=True, on_delete=models.SET_NULL, related_name='gamemessage_sender')
@@ -62,6 +63,10 @@ class Character(GameUser):
     
     def __unicode__(self):
         return self.name
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('character_detail', (), {'pk': self.id})
     
     class Meta:
         verbose_name = _('Character')

@@ -1,0 +1,10 @@
+{% extends "gamemanager/game_posts.html" %}
+{% load i18n %}
+{% block page_header %}<p>News:</p>{% endblock %}
+{% block list_item %}
+<p>{% trans "Subject" %}: {{ object.subject }}</p>
+<p>{% trans "Date" %}: {{ object.timestamp }}</p>
+<p>{% trans "Poster" %}: {{ object.sender_username }}</p>
+<p>{{ object.text }}</p>
+{% endblock %}
+{% block page_link %}{% url "game_news" game_pk=game.id page=page %}{% endblock %}

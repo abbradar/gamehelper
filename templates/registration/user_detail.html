@@ -1,15 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'registration/user_base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Profile" %} [{{ current_user.username }}]{% endblock %}
-{% block nav2 %}
-{% ifequal current_user user %}
-<li><a href="{% url user_detail 'me' %}">{% trans "Summary" %}</a></li>
-<li><a href="{% url user_change %}">{% trans "Profile change" %}</a></li>
-<li><a href="{% url password_change %}">{% trans "Password change" %}</a></li>
-{% else %}
-<li><a href="{% url user_detail current_user.id %}">{% trans "Summary" %}</a></li>
-{% endifequal %}
-{% endblock %}
 {% block main %}
 {% ifequal current_user user %}
 <p><b>It's me!</b></p>

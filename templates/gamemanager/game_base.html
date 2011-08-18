@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Game" %} [{{ object }}]{% endblock %}
+{% block nav2 %}
+<li><a href="{% url game_news game.id %}">{% trans "News" %}</a></li>
+{% if can_update %}
+<li><a href="{% url game_update game.id %}">{% trans "Game update" %}</a></li>
+{% endif %}
+<li><a href="{% url password_change %}">{% trans "Password change" %}</a></li>
+<li><a href="{% url user_detail current_user.id %}">{% trans "Summary" %}</a></li>
+{% endblock %}
+{% block right %}
+{% if my_gm %}
+<p><b>You are GM there!</b></p>
+{% endif %}
+<p>{% trans "Game masters" %}:</p>
+<ul>
+{% for gm in game_masters %}
+<li><a href="{{ gm.master.get_profile.get_absolute_url }}">{{ gm.master.username }}</a></li>
+{% empty %}
+<p>{% trans "No game masters assigned to game" %}</p>
+{% endfor %}
+</ul>
+<p>{% trans "Characters" %}:</p>
+<ul>
+{% for char in characters %}
+<li>{{ char.name }}</li>
+{% empty %}
+<p>{% trans "No characters assigned to game" %}</p>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,12 +1,12 @@
-from django.core.urlresolvers import reverse_lazy
-from django.views.generic import FormView, ListView, DetailView, CreateView
+from django.views.generic import FormView, ListView, DetailView, UpdateView, CreateView
 from django.views.generic.edit import ModelFormMixin
+from django.views.generic.detail import SingleObjectMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required
 from django.core import exceptions
 from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import ugettext as _
-from .forms import GameCreateForm
+from .forms import GameCreateForm, GameUpdateForm
 from . import models
 from .game_types import GameTypeForm, game_types
 
@@ -18,25 +18,6 @@ class GameListView(ListView):
         context = super(GameListView, self).get_context_data(**kwargs)
         if self.request.user.has_perm('gamemanager.create_game'):
             context['can_create'] = True
-        return context
-
-class GameDetailView(DetailView):
-    template_name = "gamemanager/game_detail.html"
-    model = models.Game
-  
-    def get_context_data(self, **kwargs):
-        context = super(GameDetailView, self).get_context_data(**kwargs)
-        game_masters = models.GameMaster.objects.filter(game=self.object.id)
-        characters = models.Character.objects.filter(game=self.object.id)
-        context['game_masters'] = game_masters
-        context['characters'] = characters
-        if self.request.user.is_authenticated:
-            gm = game_masters.filter(master=self.request.user.id)
-            if len(gm) is not 0:
-                context['my_gm'] = gm[0]
-                context['view_protected'] = True
-            if self.request.user.has_perm('gamemanager.view_protected_game'):
-                context['view_protected'] = True
         return context
 
 class GameTypeView(FormView):
@@ -63,7 +44,7 @@ class GameCreateView(CreateView):
         try:
             return game_types.classes[game_type].game_create_form
         except KeyError:
-            raise Http404(_(u"No %(game_type)s found matching the query") % {'game_type': game_type})
+            raise Http404(_(u"Game type %(game_type)s is invalid.") % {'game_type': game_type})
     
     def form_valid(self, form):
         self.object = form.save()
@@ -74,3 +55,64 @@ class GameCreateView(CreateView):
     @method_decorator(permission_required('gamemanager.create_game'))
     def dispatch(self, *args, **kwargs):
         return super(GameCreateView, self).dispatch(*args, **kwargs)
+
+class GameContext(SingleObjectMixin):
+    model = models.Game
+    context_object_name = 'game'
+    slug_field = 'game_slug'
+    slug_url_kwarg = 'game_slug'
+    pk_url_kwarg = 'game_pk'
+    
+    def __init__(self, request, *args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
+        self.request = request
+    
+    def get_context_data(self):
+        self.object = super(GameContext, self).get_object()
+        context = super(GameContext, self).get_context_data()
+        game_masters = models.GameMaster.objects.filter(game=self.object.id)
+        characters = models.Character.objects.filter(game=self.object.id)
+        context['game_masters'] = game_masters
+        context['characters'] = characters
+        if self.request.user.is_authenticated:
+            gm = game_masters.filter(master=self.request.user.id)
+            if len(gm) is not 0:
+                context['my_gm'] = gm[0]
+                context['view_protected'] = True
+                context['can_update'] = True
+            else:
+                if self.request.user.has_perm('gamemanager.view_protected_game'):
+                    context['view_protected'] = True
+                if self.request.user.has_perm('gamemanager.update_game'):
+                    context['can_update'] = True
+        return context
+
+class GameNewsListView(ListView):
+    template_name = "gamemanager/game_news.html"
+    
+    def get_queryset(self):
+        return models.Post.objects.filter(type='news', game_id=self.kwargs['game_pk'])
+    
+    def get_context_data(self, **kwargs):
+        context = super(GameNewsListView, self).get_context_data(**kwargs)
+        game_context = GameContext(self.request, **self.kwargs)
+        context.update(game_context.get_context_data())
+        return context
+
+class GameUpdateView(UpdateView):
+    form_class = GameUpdateForm
+    template_name = "gamemanager/game_update.html"
+    
+    def get_object(self, queryset=None):
+        self.game_context = GameContext(self.request, **self.kwargs).get_context_data()
+        object = self.game_context['game']
+        if not self.game_context['my_gm']:
+            if not self.request.user.has_perm('gamemanager.update_game'):
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(game)s''.") % {'game': object.name})
+        return object
+    
+    def get_context_data(self, **kwargs):
+        context = super(GameUpdateView, self).get_context_data(**kwargs)
+        context.update(self.game_context)
+        return context

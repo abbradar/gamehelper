@@ -1,29 +1,19 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'gamemanager/game_detail.html' %}
 {% load i18n %}
-{% block head %}
-<link href="{% static 'css/list.css' %}" rel="stylesheet" type="text/css" />
-{% block list_head %}{% endblock %}
-{% endblock %}
-{% block main %}
+{% block subpage %}
 {% block page_header %}{% endblock %}
 {% for object in object_list %}
 {% if forloop.first %}
-<table class="list">
-<thead><tr>
-{% block list_header %}{% endblock %}
-</tr></thead>
-<tbody>
+<ul class="posts">
 {% endif %}
-<tr>
+<li>
 {% block list_item %}{% endblock %}
-</tr>
+</li>
 {% if forloop.last %}
-</tbody>
-</table>
+</ul>
 {% endif %}
 {% empty %}
-{% block empty_list %}{% trans "No objects avaliable" %}{% endblock %}
+{% block empty_posts %}{% trans "No posts avaliable" %}{% endblock %}
 {% endfor %}
 {% for page in paginator.page_range %}
 {% if forloop.first %}

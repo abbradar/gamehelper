@@ -1,7 +1,7 @@
 # Django settings for gamehelper project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = True
 
 ADMINS = (
     ('Nikolay Amiantov', 'nikoamia@gmail.com'),
@@ -64,6 +64,8 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
+import os.path
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -102,6 +104,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
+import os.path
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -133,6 +137,11 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(module)s %(message)s'
+        }
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.CallbackFilter',
@@ -140,16 +149,16 @@ LOGGING = {
         }
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'console':{
+            'level':'WARNING',
+            'class':'logging.StreamHandler',
+            'formatter': 'simple',
+        },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+            'handlers': ['console'],
+            'level': 'WARNING',
             'propagate': True,
         },
     }
@@ -157,10 +166,12 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'registration.UserProfile'
 
-LOGIN_REDIRECT_URL = "/"
+ROOT_URL = "/"
+
+LOGIN_REDIRECT_URL = ROOT_URL
 
 GAME_TYPE_CLASSES = (
     'gamemanager.game_types.GameType',
 )
 
-ROOT_URL = ""
+APPEND_SLASH = True

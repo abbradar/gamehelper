@@ -1,23 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'gamemanager/game_base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Game" %} [{{ object }}]{% endblock %}
-{% block main %}
-<p>{% trans "Name" %}: {{ object }}</p>
-<p>{% trans "Creation date" %}: {{ object.creation_date }}</p>
-<p>{% trans "Description" %}: {{ object.description }}</p>
-{% if view_protected %}
+{% block nav2 %}
+<li><a href="{% url game_news game_pk=game.id %}">{% trans "News" %}</a></li>
+{% if can_update %}
+<li><a href="{% url game_update game_pk=game.id %}">{% trans "Update fields" %}</a></li>
 {% endif %}
 {% endblock %}
-{% block right %}
-{% if my_gm %}
-<p><b>You are GM there!</b></p>
-{% endif %}
-<p>{% trans "Game masters" %}:</p>
-<ul>
-{% for gm in game_masters %}
-<li><a href="{{ gm.master.get_profile.get_absolute_url }}">{{ gm.master.username }}</a></li>
-{% empty %}
-<p>{% trans "No game masters assigned to game" %}</p>
-{% endfor %}
-</ul>
+{% block main %}
+<p>{% trans "Name" %}: {{ game }}</p>
+<p>{% trans "Creation date" %}: {{ game.creation_date }}</p>
+<p>{% trans "Description" %}: {{ game.description }}</p>
+<div class="subpage">{% block subpage %}{% endblock %}</div>
 {% endblock %}
