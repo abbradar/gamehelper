@@ -88,9 +88,9 @@ class GameUpdateView(UpdateView):
     
     def get_object(self, queryset=None):
         self.game_context = get_game_context(self.request, **self.kwargs)
-        if not self.game_context['my_gm']:
+        if not 'my_gm' in self.game_context:
             if not self.request.user.has_perm('gamemanager.update_game'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(game)s''.") % {'game': object.name})
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(game)s''.") % {'game': self.game_context['game'].name})
         return self.game_context['game']
     
     def get_context_data(self, **kwargs):

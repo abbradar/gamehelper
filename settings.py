@@ -22,20 +22,9 @@ DATABASES = {
     }
 }
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
-TIME_ZONE = 'Europe/Moscow'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'ru-RU'
-
-SITE_ID = 1
+# Make this unique, and don't share it with anybody.
+# TODO: change for production
+SECRET_KEY = '0aivt0o7%i@&z0e9dfoftrk2ys7nyymvzdpck+)5tc(kw!%!m^'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -64,6 +53,14 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
+ROOT_URL = '/'
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
+
+CACHE_MIDDLEWARE_SECONDS = 5
+
+CACHE_MIDDLEWARE_KEY_PREFIX = 'gamehelper'
+
 import os.path
 
 # Additional locations of static files
@@ -74,6 +71,21 @@ STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'static').replace('\\','/'),
 )
 
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'Europe/Moscow'
+
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'ru-RU'
+
+SITE_ID = 1
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -81,9 +93,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '0aivt0o7%i@&z0e9dfoftrk2ys7nyymvzdpck+)5tc(kw!%!m^'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -93,11 +102,15 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'middleware.Http403Middleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -166,12 +179,20 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'registration.UserProfile'
 
-ROOT_URL = "/"
-
 LOGIN_REDIRECT_URL = ROOT_URL
+
+APPEND_SLASH = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    },
+   'database': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache',
+    }
+}
 
 GAME_TYPE_CLASSES = (
     'gamemanager.game_types.GameType',
 )
-
-APPEND_SLASH = True

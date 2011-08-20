@@ -1,3 +1,7 @@
+"""
+All kinds of functions which don't fit into other modules.
+"""
+
 from django.utils.importlib import import_module
 from django.utils.functional import SimpleLazyObject, new_method_proxy
 from django.core import exceptions
