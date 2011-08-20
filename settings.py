@@ -196,3 +196,5 @@ CACHES = {
 GAME_TYPE_CLASSES = (
     'gamemanager.game_types.GameType',
 )
+
+ADD_USERS_TO_DEFAULT = True

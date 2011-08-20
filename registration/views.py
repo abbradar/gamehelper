@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.views.generic.edit import ModelFormMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.conf import settings
 from .forms import UserUpdateForm
 
 class UserListView(ListView):
@@ -14,6 +15,18 @@ class UserCreateView(CreateView):
     model = User
     form_class = UserCreationForm
     template_name = 'registration/user_create.html'
+    
+    def form_valid(self, form):
+        self.object = form.save()
+        if settings.ADD_USERS_TO_DEFAULT:
+            group = Group.objects.filter(id=1)
+            if len(group):
+                group = group[0]
+            else:
+                group = Group(id=1, name="Default")
+                group.save()
+            self.object.groups.add(group)
+        return super(ModelFormMixin, self).form_valid(form)
 
 class UserDetailView(DetailView):
     model = User

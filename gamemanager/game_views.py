@@ -14,7 +14,7 @@ def get_game_context(request, **kwargs):
     context['characters'] = characters
     if request.user.is_authenticated:
         gm = game_masters.filter(master=request.user.id)
-        if len(gm) is not 0:
+        if len(gm):
             context['my_gm'] = gm[0]
             context['view_protected'] = True
             context['can_update'] = True
