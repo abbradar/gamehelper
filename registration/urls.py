@@ -3,6 +3,7 @@ from django.contrib.auth.views import login, logout, password_change
 from . import views
 from utils import abs_url
 
+# todo: replace abs_url with reverse_lazy
 urlpatterns = patterns('',
     url(r'^list/$', views.UserListView.as_view(), name='user_list'),
     url(r'^login/$',  login, name='login'),

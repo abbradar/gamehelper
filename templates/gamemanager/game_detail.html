@@ -1,11 +1,5 @@
 {% extends 'gamemanager/game_base.html' %}
 {% load i18n %}
-{% block nav2 %}
-<li><a href="{% url game_news game_pk=game.id %}">{% trans "News" %}</a></li>
-{% if can_update %}
-<li><a href="{% url game_update game_pk=game.id %}">{% trans "Update fields" %}</a></li>
-{% endif %}
-{% endblock %}
 {% block main %}
 <p>{% trans "Name" %}: {{ game }}</p>
 <p>{% trans "Creation date" %}: {{ game.creation_date }}</p>

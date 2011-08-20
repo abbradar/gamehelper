@@ -1,5 +1,5 @@
 from django.utils.importlib import import_module
-from django.utils.functional import LazyObject, new_method_proxy
+from django.utils.functional import SimpleLazyObject, new_method_proxy
 from django.core import exceptions
 from django.conf import settings
 from re import escape
@@ -20,7 +20,7 @@ def abs_url(path):
         path = settings.ROOT_URL + path[1:]
     return path
 
-class LazyList(LazyObject):
+class LazyList(SimpleLazyObject):
     """
     List which populates itself from populate() callable when accessed first time.
     """

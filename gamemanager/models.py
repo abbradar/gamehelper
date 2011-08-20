@@ -28,7 +28,7 @@ class Game(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('game_news', (), {'game_pk': self.id})
+        return ('game_detail', (), {'game_pk': self.id})
     
     class Meta:
         verbose_name = _('Game')

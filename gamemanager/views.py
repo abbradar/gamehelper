@@ -6,9 +6,11 @@ from django.contrib.auth.decorators import permission_required
 from django.core import exceptions
 from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import ugettext as _
-from .forms import GameCreateForm, GameUpdateForm
 from . import models
 from .game_types import GameTypeForm, game_types
+from .game_views import get_game_context
+from django.conf.urls.defaults import include
+from django.core.urlresolvers import RegexURLResolver
 
 class GameListView(ListView):
     template_name = "gamemanager/game_list.html"
@@ -38,16 +40,18 @@ class GameCreateView(CreateView):
     
     def get_form_class(self):
         try:
-            game_type = self.kwargs[self.game_type_field_name]
+            self.game_type = self.kwargs[self.game_type_field_name]
         except KeyError:
             raise exceptions.ImproperlyConfigured('No game type to load form. Please, specify game type.')
         try:
-            return game_types.classes[game_type].game_create_form
+            return game_types.classes[self.game_type].game_create_form
         except KeyError:
-            raise Http404(_(u"Game type %(game_type)s is invalid.") % {'game_type': game_type})
+            raise Http404(_(u"Game type %(game_type)s is invalid.") % {'game_type': self.game_type})
     
     def form_valid(self, form):
-        self.object = form.save()
+        self.object = form.save(commit=False)
+        self.object.type = self.game_type
+        self.object.save()
         gm = models.GameMaster(master = self.request.user, game = self.object)
         gm.save()
         return super(ModelFormMixin, self).form_valid(form)
@@ -56,61 +60,38 @@ class GameCreateView(CreateView):
     def dispatch(self, *args, **kwargs):
         return super(GameCreateView, self).dispatch(*args, **kwargs)
 
-class GameContext(SingleObjectMixin):
-    model = models.Game
-    context_object_name = 'game'
-    slug_field = 'game_slug'
-    slug_url_kwarg = 'game_slug'
-    pk_url_kwarg = 'game_pk'
-    
-    def __init__(self, request, *args, **kwargs):
-        self.args = args
-        self.kwargs = kwargs
-        self.request = request
-    
-    def get_context_data(self):
-        self.object = super(GameContext, self).get_object()
-        context = super(GameContext, self).get_context_data()
-        game_masters = models.GameMaster.objects.filter(game=self.object.id)
-        characters = models.Character.objects.filter(game=self.object.id)
-        context['game_masters'] = game_masters
-        context['characters'] = characters
-        if self.request.user.is_authenticated:
-            gm = game_masters.filter(master=self.request.user.id)
-            if len(gm) is not 0:
-                context['my_gm'] = gm[0]
-                context['view_protected'] = True
-                context['can_update'] = True
-            else:
-                if self.request.user.has_perm('gamemanager.view_protected_game'):
-                    context['view_protected'] = True
-                if self.request.user.has_perm('gamemanager.update_game'):
-                    context['can_update'] = True
-        return context
+def game_detail_view(request, game_pk, *args, **kwargs):
+    game = models.Game.objects.get(id=game_pk)
+    view = game_types.classes[game.type].default_view
+    return view(request, game=game, game_pk=game_pk, *args, **kwargs)
 
-class GameNewsListView(ListView):
-    template_name = "gamemanager/game_news.html"
-    
-    def get_queryset(self):
-        return models.Post.objects.filter(type='news', game_id=self.kwargs['game_pk'])
-    
-    def get_context_data(self, **kwargs):
-        context = super(GameNewsListView, self).get_context_data(**kwargs)
-        game_context = GameContext(self.request, **self.kwargs)
-        context.update(game_context.get_context_data())
-        return context
+# Here goes ugly thing that uses Django internal API
+# to dynamically resolve URLs based on game type.
+# To be rewritten with pure Django public API if it
+# supports such tricks in the future.
+# TODO: as of now it raises "It Worked!" page instead of normal debug
+# page when DEBUG=True and no URLs configured
+def game_resolve_view(request, regex, game_pk, **kwargs):
+    game = models.Game.objects.get(id=game_pk)
+    urls = game_types.classes[game.type].urls
+    urlconf_module, app_name, namespace = include(urls)
+    resolver = RegexURLResolver('', urlconf_module, kwargs, app_name=app_name, namespace=namespace)
+    view, view_args, view_kwargs = resolver.resolve(regex)
+    return view(*view_args, **view_kwargs)
 
 class GameUpdateView(UpdateView):
-    form_class = GameUpdateForm
     template_name = "gamemanager/game_update.html"
     
+    def get_form_class(self):
+        game_type = self.object.type
+        return game_types.classes[game_type].game_update_form
+    
     def get_object(self, queryset=None):
-        self.game_context = GameContext(self.request, **self.kwargs).get_context_data()
-        object = self.game_context['game']
+        self.game_context = get_game_context(self.request, **self.kwargs)
         if not self.game_context['my_gm']:
             if not self.request.user.has_perm('gamemanager.update_game'):
                 raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(game)s''.") % {'game': object.name})
-        return object
+        return self.game_context['game']
     
     def get_context_data(self, **kwargs):
         context = super(GameUpdateView, self).get_context_data(**kwargs)
