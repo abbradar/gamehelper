@@ -1,0 +1,19 @@
+{% extends 'list.html' %}
+{% load i18n %}
+{% block title %}{% trans "Characters" %} [{{ current_user.username }}]{% endblock %}
+{% block nav2 %}
+{% if can_create %}{% ifequal current_user.id user.id %}<li><a href="{% url character_create %}">{% trans "Create" %}</a></li>{% endifequal %}{% endif %}
+{% endblock %}
+{% block page_header %}<p>{% trans "Characters of user" %} {{ current_user.username }}:</p>{% endblock %}
+{% block list_header %}
+<th>{% trans "Name" %}</th>
+<th>{% trans "Type" %}</th>
+<th>{% trans "Creation date" %}</th>
+{% endblock %}
+{% block list_item %}
+<td><a href="{{ object.get_absolute_url }}">{{ object }}</a></td>
+<td>{{ object.get_type_class.verbose_name }}</td>
+<td>{{ object.creation_date }}</td>
+{% endblock %}
+{% block empty_list %}{% trans "No characters avaliable" %}{% endblock %}
+{% block page_link %}{% url "character_list" current_user.id page=page %}{% endblock %}

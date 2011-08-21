@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Character" %} [{{ character.name }}]{% endblock %}
+{% block nav2 %}
+<li><a href="{% url character_detail char_pk=character.id %}">{% trans "Review" %}</a></li>
+{% if can_update %}
+<li><a href="{% url character_update char_pk=character.id %}">{% trans "Update fields" %}</a></li>
+{% endif %}
+{% endblock %}

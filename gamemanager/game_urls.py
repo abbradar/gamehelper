@@ -1,4 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('',
+game_urlpatterns = patterns('',
+)
+
+character_urlpatterns = patterns('',
 )

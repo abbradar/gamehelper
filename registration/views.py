@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User, Group
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
-from django.views.generic.edit import ModelFormMixin
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.core import exceptions
 from django.conf import settings
 from .forms import UserUpdateForm
 
@@ -18,15 +19,16 @@ class UserCreateView(CreateView):
     
     def form_valid(self, form):
         self.object = form.save()
-        if settings.ADD_USERS_TO_DEFAULT:
-            group = Group.objects.filter(id=1)
+        if settings.ADD_USERS_TO_DEFAULT_GROUP:
+            name = settings.DEFAULT_GROUP_NAME
+            group = Group.objects.filter(name=name)
             if len(group):
                 group = group[0]
             else:
-                group = Group(id=1, name="Default")
+                group = Group(name=name)
                 group.save()
             self.object.groups.add(group)
-        return super(ModelFormMixin, self).form_valid(form)
+        return FormMixin.form_valid(form)
 
 class UserDetailView(DetailView):
     model = User
@@ -35,7 +37,9 @@ class UserDetailView(DetailView):
     
     def get_object(self):
         if self.kwargs['pk'] == 'me':
-            login_required()
+            if not self.request.user.is_authenticated():
+                # TODO: redirect to login page instead
+                raise exceptions.PermissionDenied('You need to login to view your own profile page.')
             return self.request.user
         return super(UserDetailView, self).get_object()
 
@@ -68,4 +72,4 @@ class UserPasswordChangeView(UserPrivateView):
         return form_class(self.get_object(), **self.get_form_kwargs())
     
     def get_form_kwargs(self):
-        return super(ModelFormMixin, self).get_form_kwargs()
+        return FormMixin.get_form_kwargs(self)

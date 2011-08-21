@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 from django.contrib.auth.views import login, logout, password_change
 from . import views
-from utils import abs_url
+from misc.urls import abs_url
 
 # todo: replace abs_url with reverse_lazy
 urlpatterns = patterns('',

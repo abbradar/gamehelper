@@ -109,7 +109,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'middleware.Http403Middleware',
+    'misc.middleware.Http403Middleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -197,4 +197,6 @@ GAME_TYPE_CLASSES = (
     'gamemanager.game_types.GameType',
 )
 
-ADD_USERS_TO_DEFAULT = True
+ADD_USERS_TO_DEFAULT_GROUP = True
+
+DEFAULT_GROUP_NAME = "Default"
