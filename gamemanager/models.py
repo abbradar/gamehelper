@@ -45,7 +45,7 @@ class Game(Type):
         get_latest_by = "creation_date"
         ordering = ['-last_active']
 
-class GameUser(Type):
+class GameUser(models.Model):
     master = models.ForeignKey(User)
 
 class Post(Text):
@@ -55,7 +55,7 @@ class Post(Text):
 class GameMessage(Text):
     receiver = models.ForeignKey(GameUser)
 
-class Character(GameUser):
+class Character(GameUser, Type):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
     description = models.TextField(verbose_name=_('Description'))
     game = models.ForeignKey(Game, null=True, on_delete=models.SET_NULL)

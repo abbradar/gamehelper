@@ -1,8 +1,17 @@
 {% extends 'gamemanager/character_base.html' %}
 {% load i18n %}
 {% block main %}
+{% ifequal character.master_id user.id %}
+<p><b>You are my master!</b></p>
+{% endifequal %}
 <p>{% trans "Name" %}: {{ character.name }}</p>
 <p>{% trans "Type" %}: {{ character.get_type_class.verbose_name }}</p>
 <p>{% trans "Creation date" %}: {{ character.creation_date }}</p>
+<p>{% trans "Participating in game" %}:
+{% if character.game %}
+<a href="{{ character.game.get_absolute_url }}"/>{{ character.game_name }}</a>
+{% else %}
+None
+{% endif %}</p>
 <p>{% trans "Description" %}: {{ character.description }}</p>
 {% endblock %}
