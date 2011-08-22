@@ -2,6 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+class Type(models.Model):
+    type = models.TextField(verbose_name=_('Type'), max_length=30, editable=False)
+    
+    class Meta:
+        abstract = True
+    
+    def get_type_class(self):
+        from .game_types import game_types
+        return game_types.classes[self.type]
+
 class Text(models.Model):
     creator = models.ForeignKey(User)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -15,10 +25,9 @@ class Text(models.Model):
 class Message(Text):
     receiver = models.ForeignKey(User)
 
-class Game(models.Model):
+class Game(Type):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
     description = models.TextField(blank=True, verbose_name=_('Description'))
-    type = models.TextField(verbose_name=_('Type'), max_length=30, editable=False)
     creation_date = models.DateTimeField(auto_now_add=True)
     last_active = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(verbose_name=_('Active'), default=True)
@@ -30,19 +39,14 @@ class Game(models.Model):
     def get_absolute_url(self):
         return ('game_detail', (), {'game_pk': self.id})
     
-    def get_type_class(self):
-        from .game_types import game_types
-        return game_types.classes[self.type]
-    
     class Meta:
         verbose_name = _('Game')
         verbose_name_plural = _('Games')
         get_latest_by = "creation_date"
         ordering = ['-last_active']
 
-class GameUser(models.Model):
+class GameUser(Type):
     master = models.ForeignKey(User)
-    type = models.TextField(verbose_name=_('Type'), max_length=30, editable=False)
 
 class Post(Text):
     game = models.ForeignKey(Game)
@@ -63,10 +67,6 @@ class Character(GameUser):
     @models.permalink
     def get_absolute_url(self):
         return ('character_detail', (), {'char_pk': self.id})
-    
-    def get_type_class(self):
-        from .game_types import game_types
-        return game_types.classes[self.type]
     
     class Meta:
         verbose_name = _('Character')

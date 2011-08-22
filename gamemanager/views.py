@@ -147,22 +147,26 @@ class CharacterDetailView(ByTypeDetailView):
     def get_type_urls(self, name):
         return game_types.classes[name].character_urls
 
-class GameUpdateView(UpdateView):
-    template_name = "gamemanager/game_update.html"
-    model = models.Game
-    pk_url_kwarg = 'game_pk'
-    
+class DynamicUpdateView(UpdateView):
     def get_form_class(self):
-        game_type = self.object.type
-        form_class = game_types.classes[game_type].game_update_form
+        self.game_type = self.object.type
+        form_class = self.get_form_class_2()
         model = form_class.Meta.model
         # It should be better to convert existing object to extended one, but I have no idea how can I.
         if not isinstance(self.object, model):
             self.object = model.objects.get(id=self.object.id)
         return form_class
+
+class GameUpdateView(DynamicUpdateView):
+    template_name = "gamemanager/game_update.html"
+    model = models.Game
+    pk_url_kwarg = 'game_pk'
+    
+    def get_form_class_2(self):
+        return game_types.classes[self.game_type].game_update_form
     
     def get_object(self, queryset=None):
-        object = super(CharacterUpdateView, self).get_object(queryset)    
+        object = super(GameUpdateView, self).get_object(queryset)    
         self.game_context = get_game_context(self.request, game=object, **self.kwargs)
         if not 'my_gm' in self.game_context:
             if not self.request.user.has_perm('gamemanager.update_game'):
@@ -174,22 +178,16 @@ class GameUpdateView(UpdateView):
         context.update(self.game_context)
         return context
 
-class CharacterUpdateView(UpdateView):
+class CharacterUpdateView(DynamicUpdateView):
     template_name = "gamemanager/character_update.html"
     model = models.Character
     pk_url_kwarg = 'char_pk'
     
-    def get_form_class(self):
-        game_type = self.object.type
-        form_class = game_types.classes[game_type].character_update_form
-        model = form_class.Meta.model
-        # It should be better to convert existing object to extended one, but I have no idea how can I.
-        if not isinstance(self.object, model):
-            self.object = model.objects.get(id=self.object.id)
-        return form_class
+    def get_form_class_2(self):
+        return game_types.classes[self.game_type].character_update_form
     
     def get_object(self, queryset=None):
-        object = super(CharacterUpdateView, self).get_object(queryset)
+        object = super(CharacterUpdateView, self).get_object(queryset)        
         if object.master_id != self.request.user.id:
             if not self.request.user.has_perm('gamemanager.update_character'):
                 raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
