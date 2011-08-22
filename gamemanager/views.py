@@ -123,7 +123,7 @@ class ByTypeDetailView(DynamicURLResolver):
 
 class GameDetailView(ByTypeDetailView):
     def get_name(self):
-        self.game = get_object_or_404(models.Game, id=self.kwargs['game_pk'])
+        game = get_object_or_404(models.Game, id=self.kwargs['game_pk'])
         self.extra_kwargs['game'] = game
         return game.type
     
