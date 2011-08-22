@@ -148,6 +148,8 @@ class CharacterDetailView(ByTypeDetailView):
         return game_types.classes[name].character_urls
 
 class DynamicUpdateView(UpdateView):
+    extra_context = {}
+    
     def get_form_class(self):
         self.game_type = self.object.type
         form_class = self.get_form_class_2()
@@ -156,6 +158,11 @@ class DynamicUpdateView(UpdateView):
         if not isinstance(self.object, model):
             self.object = model.objects.get(id=self.object.id)
         return form_class
+    
+    def get_context_data(self, **kwargs):
+        context = super(DynamicUpdateView, self).get_context_data(**kwargs)
+        context.update(extra_context)
+        return context
 
 class GameUpdateView(DynamicUpdateView):
     template_name = "gamemanager/game_update.html"
@@ -167,16 +174,10 @@ class GameUpdateView(DynamicUpdateView):
     
     def get_object(self, queryset=None):
         object = super(GameUpdateView, self).get_object(queryset)    
-        self.game_context = get_game_context(self.request, game=object, **self.kwargs)
-        if not 'my_gm' in self.game_context:
-            if not self.request.user.has_perm('gamemanager.update_game'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': object.name})
+        self.extra_context = get_game_context(self.request, game=object, **self.kwargs)
+        if not 'can_update' in self.game_context:
+            raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': object.name})
         return object
-    
-    def get_context_data(self, **kwargs):
-        context = super(GameUpdateView, self).get_context_data(**kwargs)
-        context.update(self.game_context)
-        return context
 
 class CharacterUpdateView(DynamicUpdateView):
     template_name = "gamemanager/character_update.html"
@@ -187,13 +188,8 @@ class CharacterUpdateView(DynamicUpdateView):
         return game_types.classes[self.game_type].character_update_form
     
     def get_object(self, queryset=None):
-        object = super(CharacterUpdateView, self).get_object(queryset)        
-        if object.master_id != self.request.user.id:
-            if not self.request.user.has_perm('gamemanager.update_character'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
+        object = super(CharacterUpdateView, self).get_object(queryset)
+        self.extra_context = get_character_context(self.request, character=self.object, **self.kwargs)
+        if not 'can_update' in self.extra_context:
+            raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
         return object
-    
-    def get_context_data(self, **kwargs):
-        context = super(CharacterUpdateView, self).get_context_data(**kwargs)
-        context.update(get_character_context(self.request, character=self.object, **self.kwargs))
-        return context
