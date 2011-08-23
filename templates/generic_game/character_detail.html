@@ -5,7 +5,7 @@
 <p><b>You are my master!</b></p>
 {% endifequal %}
 <p>{% trans "Name" %}: {{ character.name }}</p>
-<p>{% trans "Type" %}: {{ character.get_type_class.verbose_name }}</p>
+<p>{% trans "Type" %}: {{ character.get_type_class }}</p>
 <p>{% trans "Creation date" %}: {{ character.creation_date }}</p>
 <p>{% trans "Participating in game" %}:
 {% if character.game %}

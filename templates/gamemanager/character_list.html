@@ -13,7 +13,7 @@
 {% endblock %}
 {% block list_item %}
 <td><a href="{{ object.get_absolute_url }}">{{ object }}</a></td>
-<td>{{ object.get_type_class.verbose_name }}</td>
+<td>{{ object.get_type_class }}</td>
 <td>{{ object.creation_date }}</td>
 {% endblock %}
 {% block empty_list %}{% trans "No characters avaliable" %}{% endblock %}

@@ -1,3 +1,12 @@
-{% extends 'form.html' %}
+{% extends 'generic_game/game_base.html' %}
 {% load i18n %}
 {% block title %}{% trans "Update game" %}{% endblock %}
+{% block main %}
+<form action="" method="post">
+{{ form.as_p }}
+{% block form_footer %}
+<input type="submit" value="{% trans 'Submit' %}" />
+{% endblock %}
+{% csrf_token %}
+</form>
+{% endblock %}

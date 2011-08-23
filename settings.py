@@ -198,7 +198,7 @@ CACHES = {
 }
 
 GAME_TYPE_CLASSES = (
-    'generic_game.game_types.GameType',
+    'generic_game.game_types.GenericGameType',
 )
 
 ADD_USERS_TO_DEFAULT_GROUP = True

@@ -23,7 +23,7 @@
 <p>{% trans "Characters" %}:</p>
 <ul>
 {% for char in characters %}
-<li>{{ char.name }}</li>
+<li><a href="{{ char.get_absolute_url }}">{{ char.name }}</a></li>
 {% empty %}
 <p>{% trans "No characters assigned to game" %}</p>
 {% endfor %}

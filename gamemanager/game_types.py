@@ -5,6 +5,10 @@ from django.utils.functional import LazyObject
 from django.forms import Form, ChoiceField
 from misc.utils import get_class
 
+class GameType(object):
+    def __unicode__(self):
+        return getattr(self, 'verbose_name', self.name)
+
 class LazyGameTypes(LazyObject):
     def _setup(self):
         self._wrapped = GameTypes()
@@ -19,7 +23,7 @@ class GameTypes(object):
             if gt_class.name in self._classes:
                raise exceptions.ImproperlyConfigured('Game type class with name "%(name)" already exists. Change name of "%(class)".' % {'name': gt_class.name, 'class': game_class})
             self._classes[gt_class.name] = gt_class
-            verbose_name = getattr(gt_class, 'verbose_name', gt_class.name)
+            verbose_name = unicode(gt_class)
             if verbose_name in self._names.values():
                raise exceptions.ImproperlyConfigured('Game type class with verbose name "%(name)" already exists. Change name of "%(class)".' % {'name': gt_class.verbose_name, 'class': game_class})
             self._names[gt_class.name] = verbose_name
