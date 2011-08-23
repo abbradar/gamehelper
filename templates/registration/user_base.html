@@ -2,11 +2,10 @@
 {% load i18n %}
 {% block title %}{% trans "Profile" %} [{{ current_user.username }}]{% endblock %}
 {% block nav2 %}
-<li><a href="{% url user_detail current_user.id %}">{% trans "Summary" %}</a></li>
-<li><a href="{% url character_list current_user.id %}">{% trans "Characters" %}</a></li>
+<li><a href="{% url 'user_detail' current_user.id %}">{% trans "Summary" %}</a></li>
+<li><a href="{% url 'character_list' current_user.id %}">{% trans "Characters" %}</a></li>
 {% ifequal current_user.id user.id %}
-<li><a href="{% url user_change %}">{% trans "Profile update" %}</a></li>
-<li><a href="{% url user_change %}">{% trans "Profile update" %}</a></li>
-<li><a href="{% url password_change %}">{% trans "Password change" %}</a></li>
+<li><a href="{% url 'user_change' %}">{% trans "Profile update" %}</a></li>
+<li><a href="{% url 'password_change' %}">{% trans "Password change" %}</a></li>
 {% endifequal %}
 {% endblock %}

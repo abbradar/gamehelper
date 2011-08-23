@@ -1,13 +1,14 @@
 {% load i18n %}
+{% load future %}
 <ul class="nav">
-<li><a href="{%url game_list %}">Games</a></li>
-<li><a href="{%url user_list %}">Users</a></li>
+<li><a href="{%url 'game_list' %}">Games</a></li>
+<li><a href="{%url 'user_list' %}">Users</a></li>
 {% if user.is_authenticated %}
-<li><a href="{% url user_detail 'me' %}">{% trans "Profile" %} [{{ user.username }}]</a></li>
-<li><a href="{% url character_list 'me' %}">{% trans "My characters" %}</a></li>
-<li><a href="{% url logout %}">{% trans "Logout" %}</a></li>
+<li><a href="{% url 'user_detail' 'me' %}">{% trans "Profile" %} [{{ user.username }}]</a></li>
+<li><a href="{% url 'character_list' 'me' %}">{% trans "My characters" %}</a></li>
+<li><a href="{% url 'logout' %}">{% trans "Logout" %}</a></li>
 {% else %}
-<li><a href="{% url login %}">{% trans "Login" %}</a></li>
-<li><a href="{% url user_create %}">{% trans "Register" %}</a></li>
+<li><a href="{% url 'login' %}">{% trans "Login" %}</a></li>
+<li><a href="{% url 'user_create' %}">{% trans "Register" %}</a></li>
 {% endif %}
 </ul>

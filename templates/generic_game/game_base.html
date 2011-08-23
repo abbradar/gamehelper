@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load future %}
 {% block title %}{% trans "Game" %} [{{ game }}]{% endblock %}
 {% block nav2 %}
-<li><a href="{% url game_detail game_pk=game.id %}">{% trans "News" %}</a></li>
+<li><a href="{{ game.get_absolute_url }}">{% trans "News" %}</a></li>
 {% if can_update %}
-<li><a href="{% url game_update game_pk=game.id %}">{% trans "Update fields" %}</a></li>
+<li><a href="{% url 'game_update' game_pk=game.id %}">{% trans "Update fields" %}</a></li>
 {% endif %}
 {% endblock %}
 {% block right %}

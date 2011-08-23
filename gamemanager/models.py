@@ -13,7 +13,6 @@ class Type(models.Model):
         return game_types.classes[self.type]
 
 class Text(models.Model):
-    creator = models.ForeignKey(User)
     timestamp = models.DateTimeField(auto_now_add=True)
     subject = models.CharField(max_length=100)
     text = models.TextField()
@@ -21,9 +20,11 @@ class Text(models.Model):
     class Meta:
         get_latest_by = "timestamp"
         ordering = ['-timestamp']
+        abstract = True
 
 class Message(Text):
-    receiver = models.ForeignKey(User)
+    sender = models.ForeignKey(User, related_name='message_sender')
+    receiver = models.ForeignKey(User, related_name='message_receiver')
 
 class Game(Type):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
@@ -37,7 +38,7 @@ class Game(Type):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('game_detail', (), {'game_pk': self.id})
+        return ('game_detail', (), {'game_pk': self.id, 'path': ''})
     
     class Meta:
         verbose_name = _('Game')
@@ -47,13 +48,6 @@ class Game(Type):
 
 class GameUser(models.Model):
     master = models.ForeignKey(User)
-
-class Post(Text):
-    game = models.ForeignKey(Game)
-    type = models.CharField(max_length=10)
-
-class GameMessage(Text):
-    receiver = models.ForeignKey(GameUser)
 
 class Character(GameUser, Type):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
@@ -66,7 +60,7 @@ class Character(GameUser, Type):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('character_detail', (), {'char_pk': self.id})
+        return ('character_detail', (), {'char_pk': self.id, 'path': ''})
     
     class Meta:
         verbose_name = _('Character')

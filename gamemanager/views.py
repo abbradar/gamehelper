@@ -1,4 +1,4 @@
-from django.views.generic import FormView, ListView, DetailView, UpdateView, CreateView
+from django.views.generic import View, FormView, ListView
 from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required
@@ -6,12 +6,11 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.core import exceptions
 from django.http import HttpResponseRedirect, Http404
-from django.utils.translation import ugettext as _
 from django.core.urlresolvers import get_callable
+from django.utils.translation import ugettext as _
 from . import models
 from .game_types import GameTypeForm, game_types
-from .game_views import get_game_context, get_character_context
-from misc.urlresolvers import DynamicURLResolver
+from misc.views import DynamicView, DynamicResolveView
 
 class GameListView(ListView):
     template_name = "gamemanager/game_list.html"
@@ -51,145 +50,95 @@ class GameTypeView(FormView):
         return HttpResponseRedirect(self.get_success_url() % {self.type_field_name: form.cleaned_data['type']})
 
 class GameCreateTypeView(GameTypeView):
-    template_name = 'gamemanager/game_create.html'   
+    template_name = 'gamemanager/game_type.html'   
     
     @method_decorator(permission_required('gamemanager.create_game'))
     def dispatch(self, *args, **kwargs):
         return super(GameTypeView, self).dispatch(*args, **kwargs)
 
 class CharacterCreateTypeView(GameTypeView):
-    template_name = 'gamemanager/character_create.html'   
+    template_name = 'gamemanager/character_type.html'   
     
     @method_decorator(permission_required('gamemanager.create_character'))
     def dispatch(self, *args, **kwargs):
         return super(GameTypeView, self).dispatch(*args, **kwargs)
 
-class GameTypeFormView(CreateView):
-    game_type_field_name = 'type'
+class TypeBasedView(DynamicView):
+    def get_view(self):
+        self.type = self.get_type()
+        type_class = game_types.classes[self.type]
+        view = getattr(type_class, self.view_field)
+        view = get_callable(view)
+        return view
     
-    def get_form_class(self):
-        if self.form_name is '':
-            raise exceptions.ImproperlyConfigured("Provide form name")
-        try:
-            self.game_type = self.kwargs[self.game_type_field_name]
-        except KeyError:
-            raise exceptions.ImproperlyConfigured('No game type to load form. Please, specify game type.')
-        try:
-            return getattr(game_types.classes[self.game_type], self.form_name)
-        except KeyError:
-            raise Http404(_(u"Game type %(game_type)s is invalid.") % {'game_type': self.game_type})
+    def get_args(self):
+        args, kwargs = super(TypeBasedView, self).get_args()
+        kwargs['type'] = self.type
+        return args, kwargs
 
-class GameCreateView(GameTypeFormView):
-    template_name = 'gamemanager/game_create.html'
-    form_name = 'game_create_form'
+class GameCreateView(TypeBasedView):
+    view_field = 'game_create_view'
+    type_field_name = 'type'
     
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.type = self.game_type
-        self.object.save()
-        gm = models.GameMaster(master = self.request.user, game = self.object)
-        gm.save()
-        return FormMixin.form_valid(self, form)
-    
-    @method_decorator(permission_required('gamemanager.create_game'))
-    def dispatch(self, *args, **kwargs):
-        return super(GameCreateView, self).dispatch(*args, **kwargs)
+    def get_type(self):
+        return self.kwargs[self.type_field_name]
 
-class CharacterCreateView(GameTypeFormView):
-    template_name = 'gamemanager/character_create.html'
-    form_name = 'character_create_form'
+class CharacterCreateView(TypeBasedView):
+    view_field = 'character_create_view'
+    type_field_name = 'type'
     
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.type = self.game_type
-        self.object.master = self.request.user
-        self.object.save()
-        return FormMixin.form_valid(self, form)
-    
-    @method_decorator(permission_required('gamemanager.create_character'))
-    def dispatch(self, *args, **kwargs):
-        return super(CharacterCreateView, self).dispatch(*args, **kwargs)
+    def get_type(self):
+        return self.kwargs[self.type_field_name]
 
-class ByTypeDetailView(DynamicURLResolver):
-    def get_urls(self, name):
-        urls = self.get_type_urls(name)
-        if isinstance(urls, tuple):
-            urls, self.default_view = urls
-        return urls
+class GameUpdateView(TypeBasedView):
+    view_field = 'game_update_view'
     
-    def get_default_view(self):
-        urls = self.get_urls(self.get_name())
-        return super(ByTypeDetailView, self).get_default_view()
+    def get_type(self):
+        self.game = get_object_or_404(models.Game, id=self.kwargs['game_pk'])
+        return self.game.type
+    
+    def get_args(self):
+        args, kwargs = super(GameUpdateView, self).get_args()
+        kwargs['game'] = self.game
+        return args, kwargs
 
-class GameDetailView(ByTypeDetailView):
+class CharacterUpdateView(TypeBasedView):
+    view_field = 'character_update_view'
+    
+    def get_type(self):
+        self.character = get_object_or_404(models.Character, id=self.kwargs['char_pk'])
+        return self.character.type
+    
+    def get_args(self):
+        args, kwargs = super(CharacterUpdateView, self).get_args()
+        kwargs['character'] = self.character
+        return args, kwargs
+
+class GameDetailView(DynamicResolveView):
     def get_name(self):
-        game = get_object_or_404(models.Game, id=self.kwargs['game_pk'])
-        self.extra_kwargs['game'] = game
-        return game.type
+        self.game = get_object_or_404(models.Game, id=self.kwargs['game_pk'])
+        return self.game.type
     
-    def get_extra_kwargs(self):
-        self.extra_kwargs['game_pk'] = self.kwargs['game_pk']
-        return super(GameDetailView, self).get_extra_kwargs()
+    def get_args(self):
+        args, kwargs = super(GameDetailView, self).get_args()
+        kwargs['game'] = self.game
+        return args, kwargs
     
-    def get_type_urls(self, name):
+    def get_urls(self, name):
         return game_types.classes[name].game_urls
 
-class CharacterDetailView(ByTypeDetailView):
+class CharacterDetailView(DynamicResolveView):
     def get_name(self):
-        character = get_object_or_404(models.Character, id=self.kwargs['char_pk'])
-        self.extra_kwargs['character'] = character
-        return character.type
+        self.character = get_object_or_404(models.Character, id=self.kwargs['char_pk'])
+        return self.character.type
     
-    def get_extra_kwargs(self):
-        self.extra_kwargs['char_pk'] = self.kwargs['char_pk']
-        return super(CharacterDetailView, self).get_extra_kwargs()
+    def get_args(self):
+        args, kwargs = super(CharacterDetailView, self).get_args()
+        kwargs['character'] = self.character
+        return args, kwargs
     
-    def get_type_urls(self, name):
+    def get_urls(self, name):
         return game_types.classes[name].character_urls
 
-class DynamicUpdateView(UpdateView):
-    extra_context = {}
-    
-    def get_form_class(self):
-        self.game_type = self.object.type
-        form_class = self.get_form_class_2()
-        model = form_class.Meta.model
-        # It should be better to convert existing object to extended one, but I have no idea how can I.
-        if not isinstance(self.object, model):
-            self.object = model.objects.get(id=self.object.id)
-        return form_class
-    
-    def get_context_data(self, **kwargs):
-        context = super(DynamicUpdateView, self).get_context_data(**kwargs)
-        context.update(extra_context)
-        return context
-
-class GameUpdateView(DynamicUpdateView):
-    template_name = "gamemanager/game_update.html"
-    model = models.Game
-    pk_url_kwarg = 'game_pk'
-    
-    def get_form_class_2(self):
-        return game_types.classes[self.game_type].game_update_form
-    
-    def get_object(self, queryset=None):
-        object = super(GameUpdateView, self).get_object(queryset)    
-        self.extra_context = get_game_context(self.request, game=object, **self.kwargs)
-        if not 'can_update' in self.game_context:
-            raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': object.name})
-        return object
-
-class CharacterUpdateView(DynamicUpdateView):
-    template_name = "gamemanager/character_update.html"
-    model = models.Character
-    pk_url_kwarg = 'char_pk'
-    
-    def get_form_class_2(self):
-        return game_types.classes[self.game_type].character_update_form
-    
-    def get_object(self, queryset=None):
-        object = super(CharacterUpdateView, self).get_object(queryset)
-        self.extra_context = get_character_context(self.request, character=self.object, **self.kwargs)
-        if not 'can_update' in self.extra_context:
-            raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
-        return object
+game_detail_view = GameDetailView()
+character_detail_view = CharacterDetailView()

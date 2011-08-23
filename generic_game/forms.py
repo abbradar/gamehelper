@@ -1,9 +1,5 @@
 from django.forms import ModelForm
-from .models import Game, Character
-
-class GameCreateForm(ModelForm):
-    class Meta:
-        model = Game
+from gamemanager.models import Game, Character
 
 class GameUpdateForm(ModelForm):
     class Meta:

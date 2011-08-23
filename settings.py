@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'registration',
     'gamemanager',
+    'generic_game',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -149,7 +150,7 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'simple': {
             'format': '%(levelname)s %(module)s %(message)s'
@@ -163,15 +164,20 @@ LOGGING = {
     },
     'handlers': {
         'console':{
-            'level':'WARNING',
-            'class':'logging.StreamHandler',
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['console'],
+        'django': {
             'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'default': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
             'propagate': True,
         },
     }
@@ -194,7 +200,7 @@ CACHES = {
 }
 
 GAME_TYPE_CLASSES = (
-    'gamemanager.game_types.GameType',
+    'generic_game.game_types.GameType',
 )
 
 ADD_USERS_TO_DEFAULT_GROUP = True

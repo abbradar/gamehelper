@@ -1,8 +1,9 @@
 {% extends 'list.html' %}
 {% load i18n %}
+{% load future %}
 {% block title %}{% trans "Characters" %} [{{ current_user.username }}]{% endblock %}
 {% block nav2 %}
-{% if can_create %}{% ifequal current_user.id user.id %}<li><a href="{% url character_create %}">{% trans "Create" %}</a></li>{% endifequal %}{% endif %}
+{% if can_create %}{% ifequal current_user.id user.id %}<li><a href="{% url 'character_create' %}">{% trans "Create" %}</a></li>{% endifequal %}{% endif %}
 {% endblock %}
 {% block page_header %}<p>{% trans "Characters of user" %} {{ current_user.username }}:</p>{% endblock %}
 {% block list_header %}
