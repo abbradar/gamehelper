@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required
+from django.core import exceptions
 from .models import *
 from .forms import *
 from gamemanager.models import *
@@ -18,12 +19,12 @@ def get_game_context(request, **kwargs):
     context['game_masters'] = game_masters
     context['characters'] = characters
     if request.user.is_authenticated:
-        gm = game_masters.filter(master=request.user.id, game=game.id)
-        if len(gm):
-            context['my_gm'] = gm[0]
+        try:
+            gm = game_masters.get(master=request.user.id, game=game.id)
+            context['my_gm'] = gm
             context['view_protected'] = True
             context['can_update'] = True
-        else:
+        except exceptions.ObjectDoesNotExist:
             if request.user.has_perm('gamemanager.update_game'):
                 context['can_update'] = True
     return context
