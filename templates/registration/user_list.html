@@ -7,7 +7,7 @@
 <th>{% trans "Date joined" %}</th>
 {% endblock %}
 {% block list_item %}
-<td><a href="{{ object.get_profile.get_absolute_url }}">{{ object.username }}</a></td>
+<td><a href="{{ object.get_absolute_url }}">{{ object.username }}</a></td>
 <td>{{ object.get_full_name }}</td>
 <td>{{ object.date_joined }}</td>
 {% endblock %}

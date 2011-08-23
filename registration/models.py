@@ -3,12 +3,11 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.db.models.signals import post_save
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    
-    @models.permalink
-    def get_absolute_url(self):
+@models.permalink
+def user_get_absolute_url(self):
         return ('user_detail', (), {'pk': self.id})
+
+User.get_absolute_url = user_get_absolute_url
 
 def post_user_create(instance, created, **kwargs):
     if created:

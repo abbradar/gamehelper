@@ -183,8 +183,6 @@ LOGGING = {
     }
 }
 
-AUTH_PROFILE_MODULE = 'registration.UserProfile'
-
 LOGIN_REDIRECT_URL = ROOT_URL
 
 APPEND_SLASH = True

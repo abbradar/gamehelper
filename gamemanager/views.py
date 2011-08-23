@@ -18,7 +18,7 @@ class GameListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(GameListView, self).get_context_data(**kwargs)
-        if self.request.user.has_perm('gamemanager.create_game'):
+        if self.request.user.has_perm('gamemanager.add_game'):
             context['can_create'] = True
         return context
 
@@ -38,7 +38,7 @@ class CharacterListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(CharacterListView, self).get_context_data(**kwargs)
         context['current_user'] = self.current_user
-        if self.request.user.has_perm('gamemanager.create_character'):
+        if self.request.user.has_perm('gamemanager.add_character'):
             context['can_create'] = True
         return context
 
@@ -52,14 +52,14 @@ class GameTypeView(FormView):
 class GameCreateTypeView(GameTypeView):
     template_name = 'gamemanager/game_type.html'   
     
-    @method_decorator(permission_required('gamemanager.create_game'))
+    @method_decorator(permission_required('gamemanager.add_game'))
     def dispatch(self, *args, **kwargs):
         return super(GameTypeView, self).dispatch(*args, **kwargs)
 
 class CharacterCreateTypeView(GameTypeView):
     template_name = 'gamemanager/character_type.html'   
     
-    @method_decorator(permission_required('gamemanager.create_character'))
+    @method_decorator(permission_required('gamemanager.add_character'))
     def dispatch(self, *args, **kwargs):
         return super(GameTypeView, self).dispatch(*args, **kwargs)
 

@@ -25,7 +25,7 @@ def get_game_context(request, **kwargs):
             context['view_protected'] = True
             context['can_update'] = True
         except exceptions.ObjectDoesNotExist:
-            if request.user.has_perm('gamemanager.update_game'):
+            if request.user.has_perm('gamemanager.change_game'):
                 context['can_update'] = True
     return context
 
@@ -41,7 +41,7 @@ class GameCreateView(CreateView):
         gm.save()
         return FormMixin.form_valid(self, form)
     
-    @method_decorator(permission_required('gamemanager.create_game'))
+    @method_decorator(permission_required('gamemanager.add_game'))
     def dispatch(self, *args, **kwargs):
         return super(GameCreateView, self).dispatch(*args, **kwargs)
 
@@ -96,7 +96,7 @@ class CharacterCreateView(CreateView):
         self.object.save()
         return FormMixin.form_valid(self, form)
     
-    @method_decorator(permission_required('gamemanager.create_character'))
+    @method_decorator(permission_required('gamemanager.add_character'))
     def dispatch(self, *args, **kwargs):
         return super(CharacterCreateView, self).dispatch(*args, **kwargs)
 
