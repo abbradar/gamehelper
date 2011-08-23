@@ -12,5 +12,9 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+        if settings.ADD_USERS_TO_DEFAULT_GROUP:
+            name = settings.DEFAULT_GROUP_NAME
+            group = Group.objects.get(name=name)
+            instance.groups.add(group)
 
 post_save.connect(create_user_profile, sender=User)
