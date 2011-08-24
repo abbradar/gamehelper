@@ -50,6 +50,7 @@ ul.nav li {
     border-left: 2px;
     border-style: groove;
     padding-left: 2px;
+	z-index: 2;
 }
 
 .footer {
