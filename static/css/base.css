@@ -1,7 +1,17 @@
+body{
+    background: #fbc48d;
+    max-width: 1200px;
+	margin: auto;
+}
+
 .header {
-    font-size: 30px;
+    padding-left: 15px;
+    font-size: 33px;
     font-weight: bold;
     margin-bottom: 4px;
+	letter-spacing: 2px;
+	word-spacing: 7px;
+	color: #8f0505;
 }
 
 .nav, .nav2 {
@@ -12,32 +22,76 @@
 
 .nav {
     padding-bottom: 4px;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     border: 0px;
-    border-bottom: 2px;
-    border-style: groove;
+    border-bottom: #343434 2px solid;
+	letter-spacing: 2px;
+}
+
+.nav2 {
+    margin-right: 170px;
+    padding-left: 6px;
+	background: transparent;
+	padding:3px;
+	border: 0px;
+}
+
+.nav2:hover {
+    padding-left: 0px;
+	background: #eaba8a;
+	border: #cea47a 3px double;
+	margin-bottom: -6px;
+}
+
+.nav2:hover li {
+    border-style: solid;
 }
 
 ul.nav li, ul.nav2 li {
+    background: transparent;
     display: inline-block;
-    min-width: 60px;
-    height: 25px;
+    min-width: 70px;
+    height: 23px;
     text-align: center;
     padding-left: 4px;
     padding-right: 4px;
 }
 
 ul.nav li {
-    border: 1px;
-    border-style: solid;
+    border: #353535 1px dotted;
+	background: transparent;
 }
 
-.article {
+ul.nav li:hover {
+    background: #caa47e;
+}
+
+ul.nav a {
+    color: #232323;
+}
+
+.nav2 li {
+    border: 0px;
+    border-left: #333333 1px dashed;
+	padding-left: 0px;
+	margin-left:2px;
+}
+
+.nav2 li:hover {
+    border: 0px;
+    padding-left: 8px;
+	border-left: #666666 3px solid;
+}
+
+.nav2 a {
+    color: #232323;
+}
+
+.content {
     display: block;
     padding-left: 10px;
+	margin-right: 170px;
     border: 0px;
-    border-bottom: 2px;
-    border-style: groove;
 }
 
 .right {
@@ -56,9 +110,11 @@ ul.nav li {
 .footer {
     display: block;
     font-style: italic;
+	border-top: #343434 2px solid;
 }
 
 .container {
     display: block;
     position: relative;
+	padding-left: 5px;
 }

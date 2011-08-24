@@ -4,6 +4,6 @@
 <p>{% trans "Name" %}: {{ game }}</p>
 <p>{% trans "Type" %}: {{ game.get_type_class }}</p>
 <p>{% trans "Creation date" %}: {{ game.creation_date }}</p>
-<p>{% trans "Description" %}: {{ game.description }}</p>
+<p>{% trans "Description" %}: {{ game.description|linebreaksbr }}</p>
 <div class="subpage">{% block subpage %}{% endblock %}</div>
 {% endblock %}
