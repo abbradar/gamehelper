@@ -1,0 +1,42 @@
+{% extends 'messages/message_base.html' %}
+{% load static %}
+{% load i18n %}
+{% block head %}
+<link href="{% static 'css/list.css' %}" rel="stylesheet" type="text/css" />
+<title>{% block title %}{% trans "Messages" %}{% endblock %}</title>
+{% endblock %}
+{% block main %}
+{% block page_header %}{% endblock %}
+{% for object in object_list %}
+{% if forloop.first %}
+<div class="pre-list">
+<table class="list" cellpadding="0" cellspacing="0" width="700">
+<thead><tr>
+<th>{% trans "Timestamp" %}</th>
+<th>{% trans "Sender" %}</th>
+<th>{% trans "Subject" %}</th>
+</tr></thead>
+<tbody>
+{% endif %}
+<td>{{ object.timestamp }}</td>
+<td><a href="{{ object.sender.get_absolute_url }}">{{ object.sender.username }}</a></td>
+<td><a href="{% block message_link %}{% endblock %}">{{ object.subject }}</a></td>
+</tr>
+{% if forloop.last %}
+</tbody>
+</table>
+</div>
+{% endif %}
+{% empty %}
+{% trans "No messages avaliable" %}
+{% endfor %}
+{% for page in paginator.page_range %}
+{% if forloop.first %}
+<ul class="pages">
+{% endif %}
+<li><a href="{% block page_link %}{% endblock %}" {% ifequal page page_obj.number %}disabled{% endifequal %}>{{ page }}</a></li>
+{% if forloop.last %}
+</ul>
+{% endif %}
+{% endfor %}
+{% endblock %}

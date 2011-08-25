@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load future %}
+{% block title %}{% trans "Messages" %}{% endblock %}
+{% block nav2 %}
+<a href="{% url 'message_received' %}"><li>{% trans "Received" %}</li></a>
+<a href="{% url 'message_create' %}"><li>{% trans "Create" %}</li></a>
+<a href="{% url 'message_sent' %}"><li>{% trans "Sent" %}</li></a>
+<a href="{% url 'message_drafts' %}"><li>{% trans "Drafts" %}</li></a>
+{% endblock %}

@@ -5,6 +5,7 @@
 <a href="{%url 'user_list' %}"><li>Users</li></a>
 {% if user.is_authenticated %}
 <a href="{% url 'user_detail' 'me' %}"><li>{% trans "Profile" %} [{{ user.username }}]</li></a>
+<a href="{% url 'message_received' %}"><li>{% trans "Messages" %}</li></a>
 <a href="{% url 'character_list' 'me' %}"><li>{% trans "My characters" %}</li></a>
 <a href="{% url 'logout' %}"><li>{% trans "Logout" %}</li></a>
 {% else %}

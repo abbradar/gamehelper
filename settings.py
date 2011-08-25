@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.comments',
     'users_ex',
+    'messages',
     'games',
     'generic_game',
 )

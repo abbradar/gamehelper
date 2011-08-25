@@ -1,0 +1,11 @@
+{% extends 'messages/message_base.html' %}
+{% load i18n %}
+{% block main %}
+<form action="" method="post">
+{{ form.as_p }}
+{% block form_footer %}
+<input type="submit" value="{% trans 'Submit' %}" />
+{% endblock %}
+{% csrf_token %}
+</form>
+{% endblock %}

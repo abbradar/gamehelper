@@ -7,7 +7,6 @@ from django.utils.decorators import method_decorator
 from django.core import exceptions
 from django.conf import settings
 from .forms import UserUpdateForm
-from .models import UserMessage
 
 class UserListView(ListView):
     model = User
@@ -61,16 +60,3 @@ class UserPasswordChangeView(UserModifyView):
     
     def get_form_kwargs(self):
         return FormMixin.get_form_kwargs(self)
-
-class UserMessageReceivedView(ListView):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UserMessageReceivedView, self).dispatch(*args, **kwargs)
-    
-    def get_context_data(self, **kwargs):
-        context = super(UserMessageReceivedView, self).get_context_data(**kwargs)
-        context['current_user'] = self.request.user
-        return context
-    
-    def get_queryset(self):
-        return UserMessage.objects.filter(receiver=user, sent=True)

@@ -24,6 +24,7 @@ class GameListView(ListView):
 
 class CharacterListView(ListView):
     template_name = "games/character_list.html"
+    model = models.Character
     
     def get_queryset(self):
         if self.kwargs['pk'] == 'me':
@@ -33,7 +34,7 @@ class CharacterListView(ListView):
             self.current_user = self.request.user
         else:
             self.current_user = get_object_or_404(User, id=self.kwargs['pk'])
-        return models.Character.objects.filter(master=self.current_user.id)
+        return self.model.objects.filter(master=self.current_user.id)
 
     def get_context_data(self, **kwargs):
         context = super(CharacterListView, self).get_context_data(**kwargs)

@@ -1,0 +1,10 @@
+{% extends 'messages/message_base.html' %}
+{% load i18n %}
+{% block main %}
+<p>{% trans "Timestamp" %}: {{ object.timestamp }}</p>
+<p>{% trans "Sender" %}: {{ object.sender }}</p>
+<p>{% trans "Receiver" %}: {{ object.receiver }}</p>
+<p>{% trans "Subject" %}: {{ object.subject }}</p>
+<p>{% trans "Text" %}:</p>
+<p>{{ object.text }}</p>
+{% endblock %}
