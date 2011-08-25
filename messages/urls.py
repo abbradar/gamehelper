@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url
+from misc.urls import abs_url
 from . import views
 
 # todo: replace abs_url with reverse_lazy
@@ -9,5 +10,5 @@ urlpatterns = patterns('',
     url(r'create/$', views.MessageCreateView.as_view(), name='message_create'),
     url(r'detail/(?P<pk>\d+)/$', views.MessageDetailView.as_view(), name='message_detail'),
     url(r'update/(?P<pk>\d+)/$', views.MessageUpdateView.as_view(), name='message_update'),
-    url(r'delete/(?P<pk>\d+)/$', views.MessageDeleteView.as_view(), name='message_delete'),
+    url(r'delete/(?P<pk>\d+)/$', views.MessageDeleteView.as_view(success_url=abs_url('/messages/received/')), name='message_delete'),
 )

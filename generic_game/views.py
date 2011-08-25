@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.core import exceptions
 from .models import *
@@ -46,7 +46,6 @@ class GameCreateView(CreateView):
         return FormMixin.form_valid(self, form)
 
 class GameUpdateView(UpdateView):
-    pk_url_kwarg = 'game_pk'
     form_class = GameUpdateForm
     template_name = "generic_game/game_update.html"
     
@@ -59,6 +58,21 @@ class GameUpdateView(UpdateView):
         context = super(GameUpdateView, self).get_context_data(**kwargs)
         context.update(self.extra_context)
         return context
+
+
+class GameDeleteView(DeleteView):
+    template_name = "generic_game/game_confirm_delete.html"
+    
+    def get_object(self, queryset=None):
+        return self.kwargs['game']
+    
+    def get_context_data(self, **kwargs):
+        context = super(GameDeleteView, self).get_context_data(**kwargs)
+        context.update(get_game_context(self.request, **self.kwargs))
+        return context
+    
+    def get_success_url(self):
+        return self.kwargs['success_url']
 
 class GameDetailView(DetailView):
     template_name = "generic_game/game_detail.html"
@@ -81,11 +95,12 @@ def get_character_context(request, **kwargs):
     if request.user.is_authenticated:
         if character.master == request.user:
             context['can_update'] = True
+            context['can_delete'] = True
         else:
             if request.user.has_perm('games.change_character'):
                 context['can_update'] = True
             if request.user.has_perm('games.delete_character'):
-                context['can_delete'] = True        
+                context['can_delete'] = True
     return context
 
 class CharacterCreateView(CreateView):
@@ -104,14 +119,26 @@ class CharacterUpdateView(UpdateView):
     template_name = "generic_game/character_update.html"
     
     def get_object(self, queryset=None):
-        object = self.kwargs['character']
-        self.extra_context = get_character_context(self.request, **self.kwargs)
-        return object
+        return self.kwargs['character']
     
     def get_context_data(self, **kwargs):
         context = super(CharacterUpdateView, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
+        context.update(get_character_context(self.request, **self.kwargs))
         return context
+
+class CharacterDeleteView(DeleteView):
+    template_name = "generic_game/character_confirm_delete.html"
+    
+    def get_object(self, queryset=None):
+        return self.kwargs['character']
+    
+    def get_context_data(self, **kwargs):
+        context = super(CharacterDeleteView, self).get_context_data(**kwargs)
+        context.update(get_character_context(self.request, **self.kwargs))
+        return context
+    
+    def get_success_url(self):
+        return self.kwargs['success_url']
 
 class CharacterDetailView(DetailView):
     template_name = "generic_game/character_detail.html"

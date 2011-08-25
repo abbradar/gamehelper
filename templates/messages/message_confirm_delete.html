@@ -1,9 +1,9 @@
-{% extends 'generic_game/game_base.html' %}
+{% extends 'messages/message_base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Delete game!" %}{% endblock %}
+{% block title %}{% trans "Delete message" %}!{% endblock %}
 {% block main %}
 <form action="" method="post">
-<p>Are you shure?</p>
+<p>{% trans "Are you sure?" %}</p>
 {% block form_footer %}
 <input type="submit" value="{% trans 'Submit' %}" />
 {% endblock %}

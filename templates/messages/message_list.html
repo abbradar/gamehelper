@@ -1,6 +1,7 @@
 {% extends 'messages/message_base.html' %}
 {% load static %}
 {% load i18n %}
+{% load future %}
 {% block head %}
 <link href="{% static 'css/list.css' %}" rel="stylesheet" type="text/css" />
 <title>{% block title %}{% trans "Messages" %}{% endblock %}</title>
@@ -16,6 +17,7 @@
 <th>{% trans "Timestamp" %}</th>
 <th>{% trans "Sender" %}</th>
 <th>{% trans "Receiver" %}</th>
+<th>{% trans "Delete" %}</th>
 </tr></thead>
 <tbody>
 {% endif %}
@@ -23,6 +25,7 @@
 <td>{{ object.timestamp }}</td>
 <td><a href="{{ object.sender.get_absolute_url }}">{{ object.sender.username }}</a></td>
 <td><a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver.username }}</a></td>
+<td><a href="{% url 'message_delete' pk=object.pk %}">{% trans "Delete" %}</a></td>
 </tr>
 {% if forloop.last %}
 </tbody>

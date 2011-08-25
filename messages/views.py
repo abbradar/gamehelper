@@ -72,12 +72,12 @@ class MessageDetailView(DetailView):
         return self.model.objects.filter(Q(sender=self.request.user)|Q(receiver=self.request.user, sent=True))
 
 class MessageDeleteView(DeleteView):
-    template_name='messages/message_delete_confirm.html'
+    template_name='messages/message_confirm_delete.html'
     model = UserMessage
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(MessageDetailView, self).dispatch(*args, **kwargs)
+        return super(MessageDeleteView, self).dispatch(*args, **kwargs)
     
     def get_queryset(self):
         return self.model.objects.filter(Q(sender=self.request.user)|Q(receiver=self.request.user, sent=True))
