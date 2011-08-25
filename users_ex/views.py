@@ -42,7 +42,7 @@ class UserModifyView(UpdateView):
         return self.request.user
 
     def get_context_data(self, **kwargs):
-        context = super(UserPrivateView, self).get_context_data(**kwargs)
+        context = super(UserModifyView, self).get_context_data(**kwargs)
         context['current_user'] = self.object
         return context
 
