@@ -55,6 +55,8 @@ STATIC_URL = '/static/'
 
 ROOT_URL = '/'
 
+LOGIN_URL = ROOT_URL + 'users/login/'
+
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
 CACHE_MIDDLEWARE_SECONDS = 5
