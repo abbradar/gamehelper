@@ -6,5 +6,5 @@
 <p>{% trans "Receiver" %}: {{ object.receiver }}</p>
 <p>{% trans "Subject" %}: {{ object.subject }}</p>
 <p>{% trans "Text" %}:</p>
-<p>{{ object.text }}</p>
+<p>{{ object.text|linebreaksbr }}</p>
 {% endblock %}
