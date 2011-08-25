@@ -1,7 +1,7 @@
-from django.views.generic import View, FormView, ListView
+from django.views.generic import View, FormView, ListView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.core import exceptions
@@ -83,6 +83,10 @@ class GameCreateView(TypeBasedView):
     
     def get_type(self):
         return self.kwargs[self.type_field_name]
+    
+    @method_decorator(permission_required('games.add_game'))
+    def dispatch(self, *args, **kwargs):
+        return super(GameCreateView, self).dispatch(*args, **kwargs)
 
 class CharacterCreateView(TypeBasedView):
     view_field = 'character_create_view'
@@ -90,30 +94,84 @@ class CharacterCreateView(TypeBasedView):
     
     def get_type(self):
         return self.kwargs[self.type_field_name]
+    
+    @method_decorator(permission_required('games.add_character'))
+    def dispatch(self, *args, **kwargs):
+        return super(CharacterCreateView, self).dispatch(*args, **kwargs)
 
 class GameUpdateView(TypeBasedView):
     view_field = 'game_update_view'
     
     def get_type(self):
         self.game = get_object_or_404(models.Game, id=self.kwargs['game_pk'])
+        try:
+            self.gm = models.GameMaster.objects.get(master=self.request.user, game=self.game)
+        except exceptions.ObjectDoesNotExist:
+            if not self.request.user.has_perm('games.change_game'):
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': object.name})            
         return self.game.type
     
     def get_args(self):
         args, kwargs = super(GameUpdateView, self).get_args()
         kwargs['game'] = self.game
+        kwargs['gm'] = self.gm
         return args, kwargs
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GameUpdateView, self).dispatch(*args, **kwargs)
 
 class CharacterUpdateView(TypeBasedView):
     view_field = 'character_update_view'
     
     def get_type(self):
         self.character = get_object_or_404(models.Character, id=self.kwargs['char_pk'])
+        if not self.character.master != self.request.user:
+            if not self.request.user.has_perm('games.change_character'):
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
+        return self.game.type
         return self.character.type
     
     def get_args(self):
         args, kwargs = super(CharacterUpdateView, self).get_args()
         kwargs['character'] = self.character
         return args, kwargs
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CharacterUpdateView, self).dispatch(*args, **kwargs)
+
+class GameDeleteView(DeleteView):
+    template_name = 'games/game_confirm_delete.html'
+    model = models.Game
+    
+    def get_object(self, queryset=None):
+        object = super(GameDeleteView, self).get_object(queryset)
+        try:
+            game_masters.get(master=self.request.user.id, game=object.id)
+        except exceptions.ObjectDoesNotExist:
+            if not self.request.user.has_perm('games.delete_game'):
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete game ''%(name)s''.") % {'name': object.name})
+        return object
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GameDeleteView, self).dispatch(*args, **kwargs)
+
+class CharacterDeleteView(DeleteView):
+    template_name = 'games/character_confirm_delete.html'
+    model = models.Character
+    
+    def get_object(self, queryset=None):
+        object = super(CharacterDeleteView, self).get_object(queryset)
+        if object.master != request.user:
+            if not request.user.has_perm('games.delete_character'):            
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete character ''%(name)s''.") % {'name': object.name})
+        return object
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CharacterDeleteView, self).dispatch(*args, **kwargs)
 
 class GameDetailView(DynamicResolveView):
     def get_name(self):

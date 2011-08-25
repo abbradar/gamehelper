@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView, CreateView, UpdateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
@@ -63,6 +63,17 @@ class MessageDetailView(DetailView):
     form_class = MessageCreateForm
     model = UserMessage
     template_name='messages/message_detail.html'
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MessageDetailView, self).dispatch(*args, **kwargs)
+    
+    def get_queryset(self):
+        return self.model.objects.filter(Q(sender=self.request.user)|Q(receiver=self.request.user, sent=True))
+
+class MessageDeleteView(DeleteView):
+    template_name='messages/message_delete_confirm.html'
+    model = UserMessage
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

@@ -1,7 +1,5 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import permission_required
 from django.core import exceptions
 from .models import *
 from .forms import *
@@ -13,20 +11,26 @@ def get_game_context(request, **kwargs):
         game = kwargs['game']
     else:
         game = Game.objects.get(id=kwargs['game_pk'])
-    game_masters = GameMaster.objects.filter(game=game.id)
-    characters = Character.objects.filter(game=game.id)
+    game_masters = GameMaster.objects.filter(game=game)
+    characters = Character.objects.filter(game=game)
     context['game'] = game
     context['game_masters'] = game_masters
     context['characters'] = characters
     if request.user.is_authenticated:
         try:
-            gm = game_masters.get(master=request.user.id, game=game.id)
-            context['my_gm'] = gm
+            if "gm" in kwargs:
+                gm = kwargs['gm']
+            else:
+                gm = game_masters.get(master=request.user, game=game)
+            context['gm'] = gm
             context['view_protected'] = True
             context['can_update'] = True
+            context['can_delete'] = True
         except exceptions.ObjectDoesNotExist:
             if request.user.has_perm('games.change_game'):
                 context['can_update'] = True
+            if request.user.has_perm('games.delete_game'):
+                context['can_delete'] = True
     return context
 
 class GameCreateView(CreateView):
@@ -40,10 +44,6 @@ class GameCreateView(CreateView):
         gm = GameMaster(master=self.request.user, game=self.object)
         gm.save()
         return FormMixin.form_valid(self, form)
-    
-    @method_decorator(permission_required('games.add_game'))
-    def dispatch(self, *args, **kwargs):
-        return super(GameCreateView, self).dispatch(*args, **kwargs)
 
 class GameUpdateView(UpdateView):
     pk_url_kwarg = 'game_pk'
@@ -53,8 +53,6 @@ class GameUpdateView(UpdateView):
     def get_object(self, queryset=None):
         object = self.kwargs['game']
         self.extra_context = get_game_context(self.request, **self.kwargs)
-        if not 'can_update' in self.extra_context:
-            raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': object.name})
         return object
     
     def get_context_data(self, **kwargs):
@@ -82,7 +80,12 @@ def get_character_context(request, **kwargs):
     context['character'] = character
     if request.user.is_authenticated:
         if character.master == request.user:
-            context['can_update'] = True                 
+            context['can_update'] = True
+        else:
+            if request.user.has_perm('games.change_character'):
+                context['can_update'] = True
+            if request.user.has_perm('games.delete_character'):
+                context['can_delete'] = True        
     return context
 
 class CharacterCreateView(CreateView):
@@ -95,10 +98,6 @@ class CharacterCreateView(CreateView):
         self.object.master = self.request.user
         self.object.save()
         return FormMixin.form_valid(self, form)
-    
-    @method_decorator(permission_required('games.add_character'))
-    def dispatch(self, *args, **kwargs):
-        return super(CharacterCreateView, self).dispatch(*args, **kwargs)
 
 class CharacterUpdateView(UpdateView):
     form_class = CharacterCreateForm
@@ -107,8 +106,6 @@ class CharacterUpdateView(UpdateView):
     def get_object(self, queryset=None):
         object = self.kwargs['character']
         self.extra_context = get_character_context(self.request, **self.kwargs)
-        if not 'can_update' in self.extra_context:
-            raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
         return object
     
     def get_context_data(self, **kwargs):
