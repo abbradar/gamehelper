@@ -63,7 +63,7 @@ class UserPasswordChangeView(UserModifyView):
         return FormMixin.get_form_kwargs(self)
 
 class UserMessageReceivedView(ListView):
-    @method_decorator(login_required))
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(UserMessageReceivedView, self).dispatch(*args, **kwargs)
     
