@@ -1,12 +1,21 @@
-.list {
-    padding-bottom: 10px;
+table.list th {
+    background: #baa07e;
+	border-bottom: #000000 2px solid;
+}
+
+.pre-list {
+	width: 700px;
+    background: #caa47e;
+	border: #b09060 2px solid;
+	padding: 5px;
+	margin-bottom: 10px;
 }
 
 table.list th, table.list td {
-    padding: 0px;
+	padding: 3px;
     padding-left: 10px;
     padding-right: 10px;
-    border: 0px;
+	border-color: #232323;
     border-left: 1px;
     border-right: 1px;
     border-style: solid;
@@ -15,6 +24,15 @@ table.list th, table.list td {
 
 table.list th {
     font-weight: bold;
+	padding-left: 20px;
+}
+
+table.list tbody tr {
+	background: transparent;
+}
+
+table.list tbody tr:hover {
+	background: #daa07e;
 }
 
 .pages {

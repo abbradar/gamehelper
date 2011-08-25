@@ -3,7 +3,7 @@
 {% load future %}
 {% block title %}{% trans "Games" %}{% endblock %}
 {% block nav2 %}
-{% if can_create %}<li><a href="{% url 'game_create' %}">{% trans "Create" %}</a></li>{% endif %}
+{% if can_create %}<a href="{% url 'game_create' %}"><li>{% trans "Create" %}</li></a>{% endif %}
 {% endblock %}
 {% block page_header %}<p>{% trans "Games" %}:</p>{% endblock %}
 {% block list_header %}
