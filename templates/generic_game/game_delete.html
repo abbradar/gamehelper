@@ -1,0 +1,12 @@
+{% extends 'generic_game/game_base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Delete game!" %}{% endblock %}
+{% block main %}
+<form action="" method="post">
+<p>Are you shure?</p>
+{% block form_footer %}
+<input type="submit" value="{% trans 'Submit' %}" />
+{% endblock %}
+{% csrf_token %}
+</form>
+{% endblock %}

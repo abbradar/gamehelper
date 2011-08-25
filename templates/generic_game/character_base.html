@@ -7,4 +7,7 @@
 {% if can_update %}
 <a href="{% url 'character_update' char_pk=character.id %}"><li>{% trans "Update fields" %}</li></a>
 {% endif %}
+{% if can_delete %}
+<a href="{% url 'character_delete' char_pk=character.id %}"><li>{% trans "Delete character" %}</li></a>
+{% endif %}
 {% endblock %}

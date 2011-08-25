@@ -7,6 +7,9 @@
 {% if can_update %}
 <a href="{% url 'game_update' game_pk=game.id %}"><li>{% trans "Update fields" %}</li></a>
 {% endif %}
+{% if can_delete %}
+<a href="{% url 'game_delete' game_pk=game.id %}"><li>{% trans "Delete game" %}</li></a>
+{% endif %}
 {% endblock %}
 {% block right %}
 {% if gm %}
