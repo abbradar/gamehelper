@@ -69,4 +69,4 @@ class MessageDetailView(DetailView):
         return super(MessageDetailView, self).dispatch(*args, **kwargs)
     
     def get_queryset(self):
-        return self.model.objects.filter(Q(sender=self.request.user, sent=False)|Q(receiver=self.request.user, sent=True))
+        return self.model.objects.filter(Q(sender=self.request.user)|Q(receiver=self.request.user, sent=True))
