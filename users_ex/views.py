@@ -36,7 +36,7 @@ class UserModifyView(UpdateView):
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(UserPrivateView, self).dispatch(*args, **kwargs)
+        return super(UserModifyView, self).dispatch(*args, **kwargs)
     
     def get_object(self):
         return self.request.user
