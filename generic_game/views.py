@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import permission_required
 from django.core import exceptions
 from .models import *
 from .forms import *
-from gamemanager.models import *
+from games.models import *
 
 def get_game_context(request, **kwargs):
     context = {}
@@ -25,7 +25,7 @@ def get_game_context(request, **kwargs):
             context['view_protected'] = True
             context['can_update'] = True
         except exceptions.ObjectDoesNotExist:
-            if request.user.has_perm('gamemanager.change_game'):
+            if request.user.has_perm('games.change_game'):
                 context['can_update'] = True
     return context
 
@@ -41,7 +41,7 @@ class GameCreateView(CreateView):
         gm.save()
         return FormMixin.form_valid(self, form)
     
-    @method_decorator(permission_required('gamemanager.add_game'))
+    @method_decorator(permission_required('games.add_game'))
     def dispatch(self, *args, **kwargs):
         return super(GameCreateView, self).dispatch(*args, **kwargs)
 
@@ -81,7 +81,7 @@ def get_character_context(request, **kwargs):
         character = Character.objects.get(id=kwargs['char_pk'])
     context['character'] = character
     if request.user.is_authenticated:
-        if character.master_id == request.user.id:
+        if character.master == request.user:
             context['can_update'] = True                 
     return context
 
@@ -96,7 +96,7 @@ class CharacterCreateView(CreateView):
         self.object.save()
         return FormMixin.form_valid(self, form)
     
-    @method_decorator(permission_required('gamemanager.add_character'))
+    @method_decorator(permission_required('games.add_character'))
     def dispatch(self, *args, **kwargs):
         return super(CharacterCreateView, self).dispatch(*args, **kwargs)
 

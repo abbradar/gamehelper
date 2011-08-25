@@ -7,19 +7,20 @@ from django.utils.decorators import method_decorator
 from django.core import exceptions
 from django.conf import settings
 from .forms import UserUpdateForm
+from .models import UserMessage
 
 class UserListView(ListView):
     model = User
-    template_name = 'registration/user_list.html'
+    template_name = 'users_ex/user_list.html'
 
 class UserCreateView(CreateView):
     model = User
     form_class = UserCreationForm
-    template_name = 'registration/user_create.html'
+    template_name = 'users_ex/user_create.html'
 
 class UserDetailView(DetailView):
     model = User
-    template_name = 'registration/user_detail.html'
+    template_name = 'users_ex/user_detail.html'
     context_object_name = 'current_user'
     
     def get_object(self):
@@ -30,7 +31,7 @@ class UserDetailView(DetailView):
             return self.request.user
         return super(UserDetailView, self).get_object()
 
-class UserPrivateView(UpdateView):
+class UserModifyView(UpdateView):
     model = User
     
     @method_decorator(login_required)
@@ -42,16 +43,16 @@ class UserPrivateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserPrivateView, self).get_context_data(**kwargs)
-        context['current_user'] = self.get_object()
+        context['current_user'] = self.object
         return context
 
-class UserUpdateView(UserPrivateView):
+class UserUpdateView(UserModifyView):
     form_class = UserUpdateForm
-    template_name = 'registration/user_update.html'
+    template_name = 'users_ex/user_update.html'
 
-class UserPasswordChangeView(UserPrivateView):
+class UserPasswordChangeView(UserModifyView):
     form_class = PasswordChangeForm
-    template_name = 'registration/user_password_change.html'
+    template_name = 'users_ex/user_password_change.html'
     
     # not so beautiful as it should be - blame PasswordChangeForm being not ModelForm
     # (we should not send 'instance' to form, and instead send object there)
@@ -60,3 +61,16 @@ class UserPasswordChangeView(UserPrivateView):
     
     def get_form_kwargs(self):
         return FormMixin.get_form_kwargs(self)
+
+class UserMessageReceivedView(ListView):
+    @method_decorator(login_required))
+    def dispatch(self, *args, **kwargs):
+        return super(UserMessageReceivedView, self).dispatch(*args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super(UserMessageReceivedView, self).get_context_data(**kwargs)
+        context['current_user'] = self.request.user
+        return context
+    
+    def get_queryset(self):
+        return UserMessage.objects.filter(receiver=user, sent=True)

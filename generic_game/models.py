@@ -1,5 +1,6 @@
 from django.db import models
-from gamemanager.models import *
+from games.models import *
+from users_ex.models import Text
 from django.utils.translation import ugettext as _
 
 class PostCategory(models.Model):

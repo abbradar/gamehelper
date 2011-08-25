@@ -13,17 +13,17 @@ from .game_types import GameTypeForm, game_types
 from misc.views import DynamicView, DynamicResolveView
 
 class GameListView(ListView):
-    template_name = "gamemanager/game_list.html"
+    template_name = "games/game_list.html"
     model = models.Game
 
     def get_context_data(self, **kwargs):
         context = super(GameListView, self).get_context_data(**kwargs)
-        if self.request.user.has_perm('gamemanager.add_game'):
+        if self.request.user.has_perm('games.add_game'):
             context['can_create'] = True
         return context
 
 class CharacterListView(ListView):
-    template_name = "gamemanager/character_list.html"
+    template_name = "games/character_list.html"
     
     def get_queryset(self):
         if self.kwargs['pk'] == 'me':
@@ -38,7 +38,7 @@ class CharacterListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(CharacterListView, self).get_context_data(**kwargs)
         context['current_user'] = self.current_user
-        if self.request.user.has_perm('gamemanager.add_character'):
+        if self.request.user.has_perm('games.add_character'):
             context['can_create'] = True
         return context
 
@@ -50,16 +50,16 @@ class GameTypeView(FormView):
         return HttpResponseRedirect(self.get_success_url() % {self.type_field_name: form.cleaned_data['type']})
 
 class GameCreateTypeView(GameTypeView):
-    template_name = 'gamemanager/game_type.html'   
+    template_name = 'games/game_type.html'   
     
-    @method_decorator(permission_required('gamemanager.add_game'))
+    @method_decorator(permission_required('games.add_game'))
     def dispatch(self, *args, **kwargs):
         return super(GameTypeView, self).dispatch(*args, **kwargs)
 
 class CharacterCreateTypeView(GameTypeView):
-    template_name = 'gamemanager/character_type.html'   
+    template_name = 'games/character_type.html'   
     
-    @method_decorator(permission_required('gamemanager.add_character'))
+    @method_decorator(permission_required('games.add_character'))
     def dispatch(self, *args, **kwargs):
         return super(GameTypeView, self).dispatch(*args, **kwargs)
 

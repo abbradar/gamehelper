@@ -12,20 +12,6 @@ class Type(models.Model):
         from .game_types import game_types
         return game_types.classes[self.type]
 
-class Text(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
-    subject = models.CharField(max_length=100)
-    text = models.TextField()
-    
-    class Meta:
-        get_latest_by = "timestamp"
-        ordering = ['-timestamp']
-        abstract = True
-
-class Message(Text):
-    sender = models.ForeignKey(User, related_name='message_sender')
-    receiver = models.ForeignKey(User, related_name='message_receiver')
-
 class Game(Type):
     name = models.CharField(verbose_name=_('Name'), max_length=30)
     description = models.TextField(blank=True, verbose_name=_('Description'))

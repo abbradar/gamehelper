@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext as _
-from gamemanager.game_types import GameType
+from games.game_types import GameType
 from . import urls
 from .views import *
 

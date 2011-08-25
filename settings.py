@@ -138,8 +138,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'django.contrib.comments',
-    'registration',
-    'gamemanager',
+    'users_ex',
+    'games',
     'generic_game',
 )
 

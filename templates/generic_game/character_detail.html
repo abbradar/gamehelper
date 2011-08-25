@@ -1,7 +1,7 @@
 {% extends 'generic_game/character_base.html' %}
 {% load i18n %}
 {% block main %}
-{% ifequal character.master_id user.id %}
+{% ifequal character.master user %}
 <p><b>You are my master!</b></p>
 {% endifequal %}
 <p>{% trans "Name" %}: {{ character.name }}</p>

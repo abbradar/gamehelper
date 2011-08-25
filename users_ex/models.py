@@ -3,6 +3,22 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.db.models.signals import post_save
 
+class Text(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    subject = models.CharField(max_length=100)
+    text = models.TextField()
+    
+    class Meta:
+        get_latest_by = "timestamp"
+        ordering = ['-timestamp']
+        abstract = True
+
+class UserMessage(Text):
+    sender = models.ForeignKey(User, related_name='usermessage_sender')
+    receiver = models.ForeignKey(User, related_name='usermessage_receiver')
+    sent = models.BooleanField()
+    received = models.BooleanField()
+
 @models.permalink
 def user_get_absolute_url(self):
         return ('user_detail', (), {'pk': self.id})
