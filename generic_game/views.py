@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.core import exceptions
+from django.utils.translation import ugettext as _
 from .models import *
 from .forms import *
 from games.models import *

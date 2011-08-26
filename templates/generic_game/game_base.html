@@ -17,8 +17,8 @@
 {% endif %}
 <p>{% trans "Game masters" %}:</p>
 <ul>
-{% for gm in game_masters %}
-<li><a href="{{ gm.master.get_absolute_url }}">{{ gm.master.username }}</a></li>
+{% for object in game_masters %}
+<li><a href="{{ gm.master.get_absolute_url }}">{{ object.master.username }}</a></li>
 {% empty %}
 <p>{% trans "No game masters assigned to game" %}</p>
 {% endfor %}

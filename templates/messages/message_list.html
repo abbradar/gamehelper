@@ -16,7 +16,7 @@
 <th>{% trans "Subject" %}</th>
 <th>{% trans "Timestamp" %}</th>
 <th>{% trans "Sender" %}</th>
-<th>{% trans "Receiver" %}</th>
+<th>{% trans "Receivers" %}</th>
 <th>{% trans "Delete" %}</th>
 </tr></thead>
 <tbody>
@@ -24,7 +24,7 @@
 <td><a href="{% block message_link %}{% endblock %}">{{ object.subject }}</a></td>
 <td>{{ object.timestamp }}</td>
 <td><a href="{{ object.sender.get_absolute_url }}">{{ object.sender.username }}</a></td>
-<td><a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver.username }}</a></td>
+<td><a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver_usernames }}</a></td>
 <td><a href="{% url 'message_delete' pk=object.pk %}">{% trans "Delete" %}</a></td>
 </tr>
 {% if forloop.last %}

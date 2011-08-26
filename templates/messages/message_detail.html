@@ -3,7 +3,7 @@
 {% block main %}
 <p>{% trans "Timestamp" %}: {{ object.timestamp }}</p>
 <p>{% trans "Sender" %}: {{ object.sender }}</p>
-<p>{% trans "Receiver" %}: {{ object.receiver }}</p>
+<p>{% trans "Receivers" %}: {{ object.receiver_usernames }}</p>
 <p>{% trans "Subject" %}: {{ object.subject }}</p>
 <p>{% trans "Text" %}:</p>
 <p>{{ object.text|linebreaksbr }}</p>
