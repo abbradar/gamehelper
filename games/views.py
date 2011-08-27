@@ -108,7 +108,7 @@ class GameUpdateView(TypeBasedView):
             self.gm = models.GameMaster.objects.get(master=self.request.user, game=self.game)
         except exceptions.ObjectDoesNotExist:
             if not self.request.user.has_perm('games.change_game'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': object.name})            
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update game ''%(name)s''.") % {'name': self.game.name})
         return self.game.type
     
     def get_args(self):
@@ -128,7 +128,7 @@ class CharacterUpdateView(TypeBasedView):
         self.character = get_object_or_404(models.Character, id=self.kwargs['char_pk'])
         if not self.character.master != self.request.user:
             if not self.request.user.has_perm('games.change_character'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': object.name})
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to update character ''%(name)s''.") % {'name': self.character.name})
         return self.character.type
     
     def get_args(self):
@@ -149,7 +149,7 @@ class GameDeleteView(TypeBasedView):
             self.gm = models.GameMaster.objects.get(master=self.request.user, game=self.game)
         except exceptions.ObjectDoesNotExist:
             if not self.request.user.has_perm('games.delete_game'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete game ''%(name)s''.") % {'name': object.name})            
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete game ''%(name)s''.") % {'name': self.game.name})            
         return self.game.type
     
     def get_args(self):
@@ -169,7 +169,7 @@ class CharacterDeleteView(TypeBasedView):
         self.character = get_object_or_404(models.Character, id=self.kwargs['char_pk'])
         if not self.character.master != self.request.user:
             if not self.request.user.has_perm('games.delete_character'):
-                raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete character ''%(name)s''.") % {'name': object.name})
+                raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete character ''%(name)s''.") % {'name': self.character.name})
         return self.character.type
     
     def get_args(self):
