@@ -42,6 +42,7 @@ class MessageCreateView(CreateView):
         return super(MessageCreateView, self).dispatch(*args, **kwargs)
     
     def form_valid(self, form):
+        # really, i should make "commit=False" there, but there is some problems with save of ManyToManyField otherwise
         self.object = form.save(commit=False)
         self.object.sender = self.request.user
         self.object.save()
