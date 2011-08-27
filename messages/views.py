@@ -37,7 +37,7 @@ class MessageCreateView(CreateView):
     model = UserMessage
     template_name='messages/message_create.html'
     
-    @method_decorator(permission_required('messages.add_message'))
+    @method_decorator(permission_required('messages.add_usermessage'))
     def dispatch(self, *args, **kwargs):
         return super(MessageCreateView, self).dispatch(*args, **kwargs)
     
@@ -52,7 +52,7 @@ class MessageUpdateView(UpdateView):
     queryset = UserMessage.objects.filter(sent=False)
     template_name='messages/message_update.html'
     
-    @method_decorator(permission_required('messages.add_message'))
+    @method_decorator(permission_required('messages.add_usermessage'))
     def dispatch(self, *args, **kwargs):
         return super(MessageUpdateView, self).dispatch(*args, **kwargs)
     
