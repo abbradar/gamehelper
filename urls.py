@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.views.generic import RedirectView
 from django.contrib import admin
-from misc.urls import abs_regex, abs_url
+from django.core.urlresolvers import reverse_lazy
+from misc.urls import abs_regex
 
 admin.autodiscover()
 
@@ -12,5 +13,5 @@ urlpatterns = patterns('',
     url(abs_regex(r'^users/'), include('users_ex.urls')),
     url(abs_regex(r'^messages/'), include('messages.urls')),
     url(abs_regex(r'^'), include('games.urls')),
-    url(abs_regex(r'^$'), RedirectView.as_view(url=abs_url('/games/list/'))),
+    url(abs_regex(r'^$'), RedirectView.as_view(url=reverse_lazy('game_list'))),
 )

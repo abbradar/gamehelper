@@ -175,6 +175,8 @@ class CharacterDeleteView(TypeBasedView):
     def get_args(self):
         args, kwargs = super(CharacterDeleteView, self).get_args()
         kwargs['character'] = self.character
+        if 'success_url' in kwargs:
+            kwargs['success_url'] = kwargs['success_url'] % {'user_pk': self.request.user.id}
         return args, kwargs
     
     @method_decorator(login_required)
