@@ -3,7 +3,6 @@ from views import *
 
 game_urlpatterns = patterns('',
     url('^$', GameDetailView.as_view(), name='game_detail'),
-    #url('^add/character/$', UserSelectView.as_view(success_url='
 )
 
 character_urlpatterns = patterns('',

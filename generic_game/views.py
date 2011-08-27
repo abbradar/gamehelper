@@ -17,7 +17,7 @@ def get_game_context(request, **kwargs):
     context['game'] = game
     context['game_masters'] = game_masters
     context['characters'] = characters
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         try:
             if "gm" in kwargs:
                 gm = kwargs['gm']
@@ -93,7 +93,7 @@ def get_character_context(request, **kwargs):
     else:
         character = Character.objects.get(id=kwargs['char_pk'])
     context['character'] = character
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         if character.master == request.user:
             context['can_update'] = True
             context['can_delete'] = True
