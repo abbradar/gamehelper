@@ -2,9 +2,20 @@
 {% load i18n %}
 {% block main %}
 {% ifequal current_user user %}
-<p><b>It's me!</b></p>
+<p class="notification">It's me!</p>
 {% endifequal %}
+<!--
 <p>{% trans "User name" %}: {{ current_user.username }}</p>
 <p>{% trans "Full name" %}: {{ current_user.get_full_name }}</p>
 <p>{% trans "Date joined" %}: {{ current_user.date_joined }}</p>
+-->
+<p class="user_info">
+  <span class="user_nickname">{{ current_user.username }}</span>
+  {% if current_user.full_name|length > 0 %}
+    {% trans "also known as" %} <span class="user_name">{{ current_user.get_full_name }}</span>
+  {% endif %}
+</p>
+<p class="user_join">
+  <b>{% trans "Joined" %}</b>: {{ current_user.date_joined }}</span>
+</p>
 {% endblock %}

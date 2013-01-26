@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
 {% load future %}
 {% block title %}{% trans "Character" %} [{{ character.name }}]{% endblock %}
+{% block head %}
+<link href="{% static 'css/game.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/char.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block nav2 %}
 <a href="{{ character.get_absolute_url }}"><li>{% trans "Review" %}</li></a>
 {% if can_update %}

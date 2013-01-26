@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
 {% load future %}
 {% block title %}{% trans "Profile" %} [{{ current_user.username }}]{% endblock %}
+{% block head %}
+<link href="{% static 'css/user.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block nav2 %}
 <a href="{{ current_user.get_absolute_url }}"><li>{% trans "Summary" %}</li></a>
 <a href="{% url 'character_list' current_user.id %}"><li>{% trans "Characters" %}</li></a>

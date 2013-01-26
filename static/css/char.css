@@ -1,0 +1,6 @@
+.char_name b:first-child,
+.char_date b:first-child, 
+.char_desc b:first-child {
+    font-weight: bold;
+	font-size: 105%;
+}

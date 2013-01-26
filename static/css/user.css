@@ -1,0 +1,8 @@
+.user_info {
+    font-size: 120%;
+}
+
+.user_nickname, .user_name {
+    font-size: 155%;
+    font-weight: bold;
+}

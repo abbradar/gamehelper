@@ -1,0 +1,8 @@
+.mess_time b:first-child,
+.mess_sender b:first-child,
+.mess_receiver b:first-child,
+.mess_subj b:first-child,
+.mess_text b:first-child {
+    font-weight: bold;
+	font-size: 105%;
+}

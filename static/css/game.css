@@ -1,0 +1,13 @@
+.game_gm, 
+.game_char {
+    font-weight: bold;
+	font-size: 110%;
+}
+
+.game_title b:first-child, 
+.game_type b:first-child, 
+.game_date b:first-child, 
+.game_desc b:first-child {
+    font-weight: bold;
+	font-size: 105%;
+}

@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
 {% load future %}
 {% block title %}{% trans "Game" %} [{{ game }}]{% endblock %}
+{% block head %}
+<link href="{% static 'css/game.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block nav2 %}
 <a href="{{ game.get_absolute_url }}"><li>{% trans "News" %}</li></a>
 {% if can_update %}
@@ -13,9 +17,9 @@
 {% endblock %}
 {% block right %}
 {% if gm %}
-<p><b>You are GM there!</b></p>
+<p class="notification">{% trans "You are GM there!" %}</p>
 {% endif %}
-<p>{% trans "Game masters" %}:</p>
+<p class="game_gm">{% trans "Game masters" %}:</p>
 <ul>
 {% for object in game_masters %}
 <li><a href="{{ object.master.get_absolute_url }}">{{ object.master.username }}</a></li>
@@ -23,7 +27,7 @@
 <p>{% trans "No game masters assigned to game" %}</p>
 {% endfor %}
 </ul>
-<p>{% trans "Characters" %}:</p>
+<p class="game_char">{% trans "Characters" %}:</p>
 <ul>
 {% for char in characters %}
 <li><a href="{{ char.get_absolute_url }}">{{ char.name }}</a></li>

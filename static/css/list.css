@@ -1,12 +1,11 @@
 table.list th {
-    background: #baa07e;
+    background: #b67978;
 	border-bottom: #000000 2px solid;
 }
 
 .pre-list {
 	width: 700px;
-    background: #caa47e;
-	border: #b09060 2px solid;
+    background: transparent;
 	padding: 5px;
 	margin-bottom: 10px;
 }
@@ -29,10 +28,6 @@ table.list th {
 
 table.list tbody tr {
 	background: transparent;
-}
-
-table.list tbody tr:hover {
-	background: #daa07e;
 }
 
 .pages {

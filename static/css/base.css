@@ -1,7 +1,20 @@
 body{
-    background: #fbc48d;
+    background: #f0dac4;
     max-width: 1200px;
 	margin: auto;
+	text-align: justify;
+}
+
+div:empty {
+    display:none;
+}
+
+ul:empty {
+    display:none;
+}
+
+ul {
+    list-style-type: square;
 }
 
 a {
@@ -46,7 +59,7 @@ a:visited {
 }
 
 .nav2 {
-    margin-right: 170px;
+    margin-right: 270px;
     padding-left: 6px;
 	background: transparent;
 	padding:3px;
@@ -55,8 +68,8 @@ a:visited {
 
 .nav2:hover {
     padding-left: 0px;
-	background: #eaba8a;
-	border: #cea47a 3px double;
+	background: #d58888;
+	border: #b84a49 3px double;
 	margin-bottom: -6px;
 }
 
@@ -80,7 +93,7 @@ ul.nav li {
 }
 
 ul.nav li:hover {
-    background: #caa47e;
+    background: #c76e6e;
 }
 
 ul.nav a {
@@ -95,7 +108,7 @@ ul.nav a {
 
 .nav2 li:hover {
     border: 0px;
-	border-left: #666666 4px solid;
+	border-left: #560707 4px solid;
 }
 
 .nav2 a:link li {
@@ -115,21 +128,18 @@ ul.nav a {
 .content {
     display: block;
     padding-left: 10px;
-	margin-right: 170px;
+	margin-right: 275px;
     border: 0px;
 }
 
 .right {
     display: block;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    width: 160px;
+	float: right;
+    width: 260px;
     border: 0px;
     border-left: #343434 2px solid;
 	border-bottom: #343434 2px dashed;
     padding-left: 5px;
-	z-index: 2;
 }
 
 .footer {
@@ -142,4 +152,13 @@ ul.nav a {
     display: block;
     position: relative;
 	padding-left: 5px;
+}
+
+.notification {
+    display: block;
+	background: #ee7578;
+	border: 3px double #232323;
+	padding: 5px;
+	font-weight: bold;
+	font-size: 120%;
 }

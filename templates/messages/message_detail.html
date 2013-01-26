@@ -1,10 +1,9 @@
 {% extends 'messages/message_base.html' %}
 {% load i18n %}
 {% block main %}
-<p>{% trans "Timestamp" %}: {{ object.timestamp }}</p>
-<p>{% trans "Sender" %}: {{ object.sender }}</p>
-<p>{% trans "Receiver" %}: {{ object.receiver }}</p>
-<p>{% trans "Subject" %}: {{ object.subject }}</p>
-<p>{% trans "Text" %}:</p>
-<p>{{ object.text|linebreaksbr }}</p>
+<p class="mess_time"><b>{% trans "Timestamp" %}:</b> {{ object.timestamp }}</p>
+<p class="mess_sender"><b>{% trans "Sender" %}:</b> <a href="{{ object.sender.get_absolute_url }}">{{ object.sender }}</a></p>
+<p class="mess_receiver"><b>{% trans "Receiver" %}:</b> <a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver }}</a></p>
+<p class="mess_subj"><b>{% trans "Subject" %}:</b> {{ object.subject }}</p>
+<div class="mess_text"><b>{% trans "Text" %}:</b> {{ object.text|linebreaks }}</div>
 {% endblock %}
