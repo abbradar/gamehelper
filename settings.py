@@ -9,14 +9,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-import os.path
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(os.path.dirname(__file__), 'database.db').replace('\\','/'), # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'gamehelper',            # Or path to database file if using sqlite3.
+        'USER': 'gamehelper',            # Not used with sqlite3.
+        'PASSWORD': 'MMaTyhm75tLq2Yz9',  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -47,15 +45,13 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/srv/http/nginx/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-ROOT_URL = '/'
-
-LOGIN_URL = ROOT_URL + 'users/login/'
+LOGIN_URL = '/users/login/'
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
@@ -186,7 +182,7 @@ LOGGING = {
     }
 }
 
-LOGIN_REDIRECT_URL = ROOT_URL
+LOGIN_REDIRECT_URL = ''
 
 APPEND_SLASH = True
 
