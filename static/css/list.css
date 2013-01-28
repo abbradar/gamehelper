@@ -1,33 +1,20 @@
-table.list th {
-    background: #b67978;
-	border-bottom: #000000 2px solid;
-}
-
 .pre-list {
-	width: 700px;
     background: transparent;
-	padding: 5px;
-	margin-bottom: 10px;
+    padding: 5px;
+    margin-bottom: 10px;
 }
 
-table.list th, table.list td {
-	padding: 3px;
-    padding-left: 10px;
-    padding-right: 10px;
-	border-color: #232323;
-    border-left: 1px;
-    border-right: 1px;
-    border-style: solid;
-    text-align: left;
+.list_item {
+    margin-bottom: 20px;
 }
 
-table.list th {
+.list_item a{
+    font-size: 150%;
+}
+
+.list_left {
+    font-size: 95%;
     font-weight: bold;
-	padding-left: 20px;
-}
-
-table.list tbody tr {
-	background: transparent;
 }
 
 .pages {
@@ -41,4 +28,33 @@ ul.pages li {
     display: inline-block;
     height: 25px;
     padding-right: 2px;
+}
+
+table.list {
+    width: 700px;
+}
+
+table.list th {
+    background: #b67978;
+    border: #000000 2px solid;
+}
+
+table.list th, table.list td {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-color: #232323;
+    border-left: 1px;
+    border-right: 1px;
+    border-bottom: 1px;
+    border-style: solid;
+    text-align: left;
+}
+
+table.list th {
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+table.list tbody tr {
+    background: transparent;
 }

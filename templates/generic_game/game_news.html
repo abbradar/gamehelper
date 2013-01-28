@@ -5,6 +5,6 @@
 <p class="game_subj"><b>{% trans "Subject" %}:</b> {{ object.subject }}</p>
 <p class="game_date"><b>{% trans "Date" %}:</b> {{ object.timestamp }}</p>
 <p class="game_sender"><b>{% trans "Poster" %}:</b> {{ object.sender_username }}</p>
-<div class="game_text">{{ object.text }}</div>
+<div class="game_text">{{ object.text|escape }}</div>
 {% endblock %}
 {% block page_link %}{% url "game_news" game_pk=game.id page=page %}{% endblock %}

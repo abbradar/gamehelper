@@ -1,8 +1,8 @@
 body{
     background: #f0dac4;
     max-width: 1200px;
-	margin: auto;
-	text-align: justify;
+    margin: auto;
+    text-align: justify;
 }
 
 div:empty {
@@ -19,7 +19,7 @@ ul {
 
 a {
     color: #232323;
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 a:hover {
@@ -39,9 +39,9 @@ a:visited {
     font-size: 33px;
     font-weight: bold;
     margin-bottom: 4px;
-	letter-spacing: 2px;
-	word-spacing: 7px;
-	color: #8f0505;
+    letter-spacing: 2px;
+    word-spacing: 7px;
+    color: #8f0505;
 }
 
 .nav, .nav2 {
@@ -51,26 +51,27 @@ a:visited {
 }
 
 .nav {
-    padding-bottom: 4px;
-    margin-bottom: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 0px;
     border: 0px;
-    border-bottom: #343434 2px solid;
-	letter-spacing: 2px;
+    border-bottom: #343434 3px solid;
+    letter-spacing: 2px;
 }
 
 .nav2 {
+    padding-top: 5px;
     margin-right: 270px;
     padding-left: 6px;
-	background: transparent;
-	padding:3px;
-	border: 0px;
+    background: transparent;
+    padding:3px;
+    border: 0px;
 }
 
 .nav2:hover {
     padding-left: 0px;
-	background: #d58888;
-	border: #b84a49 3px double;
-	margin-bottom: -6px;
+    background: #d58888;
+    border: #b84a49 3px double;
+    margin-bottom: -6px;
 }
 
 .nav2:hover li {
@@ -80,16 +81,14 @@ a:visited {
 ul.nav li, ul.nav2 li {
     background: transparent;
     display: inline-block;
-    min-width: 70px;
     height: 23px;
-    text-align: center;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding: 1px 15px 1px 15px
 }
 
 ul.nav li {
+    text-align: center;
     border: #353535 1px dotted;
-	background: transparent;
+    background: transparent;
 }
 
 ul.nav li:hover {
@@ -103,22 +102,23 @@ ul.nav a {
 .nav2 li {
     border: 0px;
     border-left: #333333 1px dashed;
-	margin-left:2px;
+    margin-left: 2px;
+    padding-left: 15px;
 }
 
 .nav2 li:hover {
     border: 0px;
-	border-left: #560707 4px solid;
+    border-left: #560707 4px solid;
 }
 
 .nav2 a:link li {
     color: #232323;
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .nav2 a:hover li {
     color: #000000;
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .nav2 a:visited li {
@@ -128,37 +128,44 @@ ul.nav a {
 .content {
     display: block;
     padding-left: 10px;
-	margin-right: 275px;
+    margin-right: 275px;
     border: 0px;
 }
 
 .right {
     display: block;
-	float: right;
+    float: right;
     width: 260px;
     border: 0px;
     border-left: #343434 2px solid;
-	border-bottom: #343434 2px dashed;
+    border-bottom: #343434 2px dashed;
     padding-left: 5px;
+    position: relative;
 }
 
 .footer {
     display: block;
     font-style: italic;
-	border-top: #343434 2px solid;
+    border-top: #343434 2px solid;
 }
 
 .container {
     display: block;
     position: relative;
-	padding-left: 5px;
+    padding-left: 5px;
 }
 
 .notification {
     display: block;
-	background: #ee7578;
-	border: 3px double #232323;
-	padding: 5px;
-	font-weight: bold;
-	font-size: 120%;
+    background: #ee7578;
+    border: 3px double #232323;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.content_head {
+    font-weight: bold;
+    font-size: 135%;
+    margin: 4px 0px 0px 10px;
 }

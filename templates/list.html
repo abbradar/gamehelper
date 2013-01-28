@@ -6,27 +6,16 @@
 {% block list_head %}{% endblock %}
 {% endblock %}
 {% block main %}
-{% block page_header %}{% endblock %}
-{% for object in object_list %}
-{% if forloop.first %}
+<p class="content_head">{% block page_header %}{% endblock %}</p>
 <div class="pre-list">
-<table class="list" cellpadding="0" cellspacing="0" width="700">
-<thead><tr>
-{% block list_header %}{% endblock %}
-</tr></thead>
-<tbody>
-{% endif %}
-<tr>
+<ul class="list">
+{% for object in object_list %}
 {% block list_item %}{% endblock %}
-</tr>
-{% if forloop.last %}
-</tbody>
-</table>
-</div>
-{% endif %}
 {% empty %}
-{% block empty_list %}{% trans "No objects avaliable" %}{% endblock %}
+<p class="notification">{% block empty_list %}{% trans "No objects avaliable" %}{% endblock %}</p>
 {% endfor %}
+</ul>
+</div>
 {% for page in paginator.page_range %}
 {% if forloop.first %}
 <ul class="pages">

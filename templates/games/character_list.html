@@ -5,16 +5,14 @@
 {% block nav2 %}
 {% if can_create %}{% ifequal current_user.id user.id %}<a href="{% url 'character_create' %}"><li>{% trans "Create" %}</li></a>{% endifequal %}{% endif %}
 {% endblock %}
-{% block page_header %}<p>{% trans "Characters of user" %} {{ current_user.username }}:</p>{% endblock %}
-{% block list_header %}
-<th>{% trans "Name" %}</th>
-<th>{% trans "Type" %}</th>
-<th>{% trans "Creation date" %}</th>
-{% endblock %}
+{% block page_header %}{% trans "Characters of user" %} {{ current_user.username }}:{% endblock %}
 {% block list_item %}
-<td><a href="{{ object.get_absolute_url }}">{{ object }}</a></td>
-<td>{{ object.get_type_class }}</td>
-<td>{{ object.creation_date }}</td>
+<li>
+<div class="list_item">
+<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.creation_date }}]<br />
+<div class="list_left">{{ object.get_type_class }}</div>
+</div>
+</li>
 {% endblock %}
 {% block empty_list %}{% trans "No characters avaliable" %}{% endblock %}
 {% block page_link %}{% url "character_list" current_user.id page=page %}{% endblock %}

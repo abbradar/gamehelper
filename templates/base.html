@@ -10,6 +10,7 @@
 {% include 'header.html' %}
 {% include 'nav.html' %}
 <div class="container">
+<div class="right">{% block right %}{% endblock %}</div>
 <ul class="nav2">{% block nav2 %}{% endblock %}</ul>
 {% if messages %}
 <ul class="messages">
@@ -18,7 +19,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-<div class="right">{% block right %}{% endblock %}</div>
 <div class="content">
 {% block main %}{% endblock %}
 </div>

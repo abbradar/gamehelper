@@ -13,5 +13,5 @@
 {% else %}
 None
 {% endif %}</p>
-<div class="char_desc"><b>{% trans "Description" %}:</b> {{ character.description|linebreaks }}</div>
+<div class="char_desc"><b>{% trans "Description" %}:</b> {{ character.description|linebreaks|escape }}</div>
 {% endblock %}

@@ -5,5 +5,5 @@
 <p class="mess_sender"><b>{% trans "Sender" %}:</b> <a href="{{ object.sender.get_absolute_url }}">{{ object.sender }}</a></p>
 <p class="mess_receiver"><b>{% trans "Receiver" %}:</b> <a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver }}</a></p>
 <p class="mess_subj"><b>{% trans "Subject" %}:</b> {{ object.subject }}</p>
-<div class="mess_text"><b>{% trans "Text" %}:</b> {{ object.text|linebreaks }}</div>
+<div class="mess_text"><b>{% trans "Text" %}:</b> {{ object.text|linebreaks|escape }}</div>
 {% endblock %}

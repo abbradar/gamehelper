@@ -6,11 +6,11 @@
 <title>{% block title %}{% trans "Messages" %}{% endblock %}</title>
 {% endblock %}
 {% block main %}
-{% block page_header %}{% endblock %}
+<p class="content_head">{% block page_header %}{% endblock %}</p>
+<div class="pre-list">
 {% for object in object_list %}
 {% if forloop.first %}
-<div class="pre-list">
-<table class="list" cellpadding="0" cellspacing="0" width="700">
+<table class="list" cellpadding="4" cellspacing="0">
 <thead><tr>
 <th>{% trans "Subject" %}</th>
 <th>{% trans "Timestamp" %}</th>
@@ -27,11 +27,11 @@
 {% if forloop.last %}
 </tbody>
 </table>
-</div>
 {% endif %}
 {% empty %}
-{% trans "No messages avaliable" %}
+<p class="notification">{% trans "No messages avaliable" %}</p>
 {% endfor %}
+</div>
 {% for page in paginator.page_range %}
 {% if forloop.first %}
 <ul class="pages">

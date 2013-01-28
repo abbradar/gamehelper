@@ -1,5 +1,5 @@
 {% extends 'messages/message_list.html' %}
 {% load i18n %}
-{% block page_header %}<p>{% trans "Sent" %}:</p>{% endblock %}
+{% block page_header %}{% trans "Sent" %}:{% endblock %}
 {% block message_link %}{{ object.get_absolute_url }}{% endblock %}
 {% block page_link %}{% url "message_sent" page=page %}{% endblock %}

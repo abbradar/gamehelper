@@ -4,6 +4,6 @@
 <p class="game_title"><b>{% trans "Title" %}:</b> {{ game }}</p>
 <p class="game_type"><b>{% trans "Type" %}:</b> {{ game.get_type_class }}</p>
 <p class="game_date"><b>{% trans "Creation date" %}:</b> {{ game.creation_date }}</p>
-<div class="game_desc"><b>{% trans "Description" %}:</b> {{ game.description|linebreaks }} </div>
+<div class="game_desc"><b>{% trans "Description" %}:</b> {{ game.description|linebreaks|escape }} </div>
 <div class="subpage">{% block subpage %}{% endblock %}</div>
 {% endblock %}
