@@ -16,6 +16,7 @@
 <th>{% trans "Timestamp" %}</th>
 <th>{% trans "Sender" %}</th>
 <th>{% trans "Receiver" %}</th>
+{% block message_acts_head %}{% endblock %}
 </tr></thead>
 <tbody>
 {% endif %}
@@ -23,6 +24,7 @@
 <td>{{ object.timestamp }}</td>
 <td><a href="{{ object.sender.get_absolute_url }}">{{ object.sender.username }}</a></td>
 <td><a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver.username }}</a></td>
+{% block message_acts %}{% endblock %}
 </tr>
 {% if forloop.last %}
 </tbody>

@@ -4,3 +4,9 @@
 {% block page_header %}{% trans "Drafts" %}:{% endblock %}
 {% block message_link %}{% url 'message_update' pk=object.id %}{% endblock %}
 {% block page_link %}{% url "message_drafts" page=page %}{% endblock %}
+{% block message_acts_head %}
+<th><!--{% trans "Delete" %}--></th>
+{% endblock %}
+{% block message_acts %}
+<td><a href="{% url 'message_delete' pk=object.id %}">{% trans "Delete" %}</a></td>
+{% endblock %}
