@@ -15,10 +15,11 @@ class MessageListView(ListView):
 
 class MessageReceivedView(MessageListView):
   template_name='messages/message_received.html'
-  queryset = UserMessage.objects.exclude(sending_time=None).filter(usermessagecopy__copy=True)
-  
+  queryset = UserMessage.objects.exclude(sending_time=None) 
+
   def get_queryset(self):
-    return self.queryset.exclude(sender=self.request.user).filter(receivers=self.request.user)
+    return self.queryset.exclude(sender=self.request.user).filter(usermessagecopy__copy=True,
+        usermessagecopy__user=self.request.user)
 
 class MessageSentView(MessageListView):
   template_name='messages/message_sent.html'
@@ -106,8 +107,8 @@ class MessageDetailView(DetailView):
     return super(MessageDetailView, self).dispatch(*args, **kwargs)
   
   def get_queryset(self):
-    return self.model.objects.filter(Q(sender=self.request.user, sender_copy=True) |
-        Q(receivers=self.request.user, usermessagecopy__copy=True))
+    return self.model.objects.exclude(~Q(sender=self.request.user, sender_copy=True),
+        ~Q(receivers=self.request.user, usermessagecopy__copy=True))
 
 class MessageDeleteView(DeleteView):
   template_name='messages/message_confirm_delete.html'
@@ -116,10 +117,10 @@ class MessageDeleteView(DeleteView):
   @method_decorator(login_required)
   def dispatch(self, *args, **kwargs):
     return super(MessageDeleteView, self).dispatch(*args, **kwargs)
-  
+
   def get_queryset(self):
-    return self.model.objects.filter(Q(sender=self.request.user, sender_copy=True) |
-        Q(receivers=self.request.user, usermessagecopy__copy=True))
+    return self.model.objects.exclude(~Q(sender=self.request.user, sender_copy=True),
+        ~Q(receivers=self.request.user, usermessagecopy__copy=True))
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
