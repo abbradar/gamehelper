@@ -28,6 +28,3 @@ class UserMessageCopy(models.Model):
   user = models.ForeignKey(User, db_index=True)
   copy = models.BooleanField(default=False)
   unread = models.BooleanField(default=True)
-
-  class Meta:
-    get_latest_by = "pk"
