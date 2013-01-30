@@ -27,4 +27,7 @@ class UserMessageCopy(models.Model):
   message = models.ForeignKey(UserMessage)
   user = models.ForeignKey(User, db_index=True)
   copy = models.BooleanField(default=False)
+  unread = models.BooleanField(default=True)
 
+  class Meta:
+    get_latest_by = "pk"
