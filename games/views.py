@@ -212,3 +212,7 @@ class CharacterDetailView(DynamicResolveView):
 
 game_detail_view = GameDetailView()
 character_detail_view = CharacterDetailView()
+unread = models.BooleanField(default=True)
+
+  class Meta:
+    get_latest_by = "pk"

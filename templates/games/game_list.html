@@ -7,8 +7,11 @@
 {% block list_item %}
 <li>
 <div class="list_item">
-<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.creation_time }}]<br />
+<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.modification_time }}]<br />
 <div class="list_left">{{ object.get_type_class }}</div>
+{% if object.active != 1 %}
+{% trans "Game is not active!" %}
+{% endif %}
 </div>
 </li>
 {% endblock %}

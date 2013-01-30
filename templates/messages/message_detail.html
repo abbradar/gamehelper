@@ -2,7 +2,8 @@
 {% load future %}
 {% load i18n %}
 {% block main %}
-<p class="mess_time"><b>{% trans "Timestamp" %}:</b> {{ object.timestamp }}</p>
+<p class="mess_time"><b>{% trans "Creation date" %}:</b> {{ object.creation_time }}</p>
+<p class="mess_time"><b>{% trans "Last update" %}:</b> {{ object.modification_time }}</p>
 <p class="mess_sender"><b>{% trans "Sender" %}:</b> <a href="{{ object.sender.get_absolute_url }}">{{ object.sender }}</a></p>
 <p class="mess_receiver"><b>{% trans "Receiver" %}:</b> <a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver }}</a></p>
 <p class="mess_subj"><b>{% trans "Subject" %}:</b> {{ object.subject }}</p>
