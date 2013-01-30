@@ -2,12 +2,13 @@
 {% load future %}
 {% load i18n %}
 {% block main %}
-{% ifequal character.master user %}
+{% ifequal character.user user %}
 <p class="notification">You are my master!</p>
 {% endifequal %}
 <p class="char_name"><b>{% trans "Name" %}:</b> {{ character.name }}</p>
 <p class="game_type"><b>{% trans "Type" %}:</b> {{ character.get_type_class }}</p>
-<p class="char_date"><b>{% trans "Creation date" %}:</b> {{ character.creation_date }}</p>
+<p class="char_date"><b>{% trans "Creation date" %}:</b> {{ character.creation_time }}</p>
+<p class="char_date"><b>{% trans "Last update" %}:</b> {{ character.modification_time }}</p>
 <p class="char_games"><b>{% trans "Participating in game" %}:</b>
 {% if character.game %}
 <a href="{{ character.game.get_absolute_url }}"/>{{ character.game_name }}</a>

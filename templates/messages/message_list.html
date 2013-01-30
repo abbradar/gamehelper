@@ -14,7 +14,7 @@
 <table class="list" cellpadding="4" cellspacing="0">
 <thead><tr>
 <th>{% trans "Subject" %}</th>
-<th>{% trans "Timestamp" %}</th>
+<th>{% block timestamp_head %}{% trans "Timestamp" %}{% endblock %}</th>
 <th>{% trans "Sender" %}</th>
 <th>{% trans "Receiver" %}</th>
 {% block message_acts_head %}{% endblock %}
@@ -22,9 +22,16 @@
 <tbody>
 {% endif %}
 <td><a href="{% block message_link %}{% endblock %}">{{ object.subject }}</a></td>
-<td>{{ object.timestamp }}</td>
+<td>{% block timestamp %}{% endblock %}</td>
 <td><a href="{{ object.sender.get_absolute_url }}">{{ object.sender.username }}</a></td>
-<td><a href="{{ object.receiver.get_absolute_url }}">{{ object.receiver.username }}</a></td>
+<td>
+{% with receiver=object.receivers.all|first %}
+<a href="{{ receiver.get_absolute_url }}">{{ receiver.username }}</a>
+{% endwith %}
+{% if object.receivers.all|length > 1 %}
+, ...
+{% endif %}
+</td>
 {% block message_acts %}{% endblock %}
 </tr>
 {% if forloop.last %}

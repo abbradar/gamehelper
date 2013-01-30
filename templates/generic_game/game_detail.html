@@ -2,9 +2,13 @@
 {% load future %}
 {% load i18n %}
 {% block main %}
+{% if game.active != 1 %}
+<div class="notification">{% trans "Game is not active!" %}</div>
+{% endif %}
 <p class="game_title"><b>{% trans "Title" %}:</b> {{ game }}</p>
 <p class="game_type"><b>{% trans "Type" %}:</b> {{ game.get_type_class }}</p>
-<p class="game_date"><b>{% trans "Creation date" %}:</b> {{ game.creation_date }}</p>
+<p class="game_date"><b>{% trans "Creation date" %}:</b> {{ game.creation_time }}</p>
+<p class="game_date"><b>{% trans "Last update" %}:</b> {{ game.modification_time }}</p>
 <div class="game_desc"><b>{% trans "Description" %}:</b> {{ game.description|linebreaks|escape }} </div>
 <div class="subpage">{% block subpage %}{% endblock %}</div>
 {% endblock %}
