@@ -26,3 +26,24 @@ application = get_wsgi_application()
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
+
+try:
+
+  import uwsgi
+  from uwsgidecorators import *
+  import hgapi
+  from django.utils import autoreload
+  from django.core import management
+
+  @cron(0, -1, -1, -1, -1)
+  def update_source(num):
+    repo = hgapi.Repo(os.getcwd())
+    repo.hg_command("pull")
+    repo.hg_update("default")
+    management.call_command("collectstatic", interactive=False)
+    if autoreload.code_changed():
+      management.call_command("syncdb", interactive=False)
+      uwsgi.reload()
+
+except ImportError:
+  pass

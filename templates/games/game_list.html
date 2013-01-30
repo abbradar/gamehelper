@@ -1,13 +1,13 @@
 {% extends 'list.html' %}
-{% load i18n %}
 {% load future %}
+{% load i18n %}
 {% block title %}{% trans "Games" %}{% endblock %}
 {% block nav2 %}{% if can_create %}<a href="{% url 'game_create' %}"><li>{% trans "Create" %}</li></a>{% endif %}{% endblock %}
 {% block page_header %}{% trans "Games" %}:{% endblock %}
 {% block list_item %}
 <li>
 <div class="list_item">
-<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.creation_date }}]<br />
+<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.creation_time }}]<br />
 <div class="list_left">{{ object.get_type_class }}</div>
 </div>
 </li>

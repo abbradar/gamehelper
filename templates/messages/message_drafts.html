@@ -1,6 +1,6 @@
 {% extends 'messages/message_list.html' %}
-{% load i18n %}
 {% load future %}
+{% load i18n %}
 {% block page_header %}{% trans "Drafts" %}:{% endblock %}
 {% block message_link %}{% url 'message_update' pk=object.id %}{% endblock %}
 {% block page_link %}{% url "message_drafts" page=page %}{% endblock %}
