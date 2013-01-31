@@ -20,8 +20,7 @@ class DynamicViewMixin(object):
     return self.args, self.kwargs
 
 class DynamicView(DynamicViewMixin, View):
-  def __init__(self, **kwargs):
-    super(DynamicView, self).__init__(**kwargs)
+  pass
 
 # Here goes ugly thing that uses Django internal API
 # to dynamically resolve URLs based on game type.
