@@ -1,5 +1,8 @@
 # Django settings for gamehelper project.
 
+# TODO: Until Django 1.5
+from django.core.urlresolvers import reverse_lazy
+
 DEBUG = True
 TEMPLATE_DEBUG = True
 
@@ -53,7 +56,9 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/users/login/'
+LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'root'
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
@@ -185,8 +190,6 @@ LOGGING = {
   }
 }
 
-LOGIN_REDIRECT_URL = '/'
-
 APPEND_SLASH = True
 
 CACHES = {
@@ -206,3 +209,7 @@ GAME_TYPE_CLASSES = (
 ADD_USERS_TO_DEFAULT_GROUP = True
 
 DEFAULT_GROUP_NAME = "Default"
+
+# TODO: Until Django 1.5
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = reverse_lazy('root')

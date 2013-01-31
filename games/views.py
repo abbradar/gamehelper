@@ -47,8 +47,11 @@ class GameTypeView(FormView):
   form_class = GameTypeForm
   type_field_name = 'type'
   
+  def get_typed_url(self, type):
+    return self.get_success_url() % {self.type_field_name: type}
+
   def form_valid(self, form):
-    return HttpResponseRedirect(self.get_success_url() % {self.type_field_name: form.cleaned_data['type']})
+    return HttpResponseRedirect(self.get_typed_url(form.cleaned_data['type']))
 
 class GameCreateTypeView(GameTypeView):
   template_name = 'games/game_type.html'   
@@ -172,12 +175,14 @@ class CharacterDeleteView(TypeBasedView):
       if not self.request.user.has_perm('games.delete_character'):
         raise exceptions.PermissionDenied(_(u"You don''t have permissions to delete character ''%(name)s''.") % {'name': self.character.name})
     return self.character.type
-  
+
+  def get_usered_url(user):
+    return self.kwargs['success_url']
+
   def get_args(self):
     args, kwargs = super(CharacterDeleteView, self).get_args()
     kwargs['character'] = self.character
-    if 'success_url' in kwargs:
-      kwargs['success_url'] = kwargs['success_url'] % {'user_pk': self.request.user.id}
+    kwargs['success_url'] = self.get_usered_url(self.request.user.pk)
     return args, kwargs
   
   @method_decorator(login_required)

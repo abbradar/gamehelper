@@ -12,5 +12,5 @@ urlpatterns = patterns('',
   url(r'^users/', include('users_ex.urls')),
   url(r'^messages/', include('messages.urls')),
   url(r'^', include('games.urls')),
-  url(r'^$', RedirectView.as_view(url=reverse_lazy('game_list'))),
+  url(r'^$', RedirectView.as_view(url=reverse_lazy('game_list')), name='root'),
 )
