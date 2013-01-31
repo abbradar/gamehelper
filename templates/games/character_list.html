@@ -9,7 +9,7 @@
 {% block list_item %}
 <li>
 <div class="list_item">
-<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.creation_date }}]<br />
+<a href="{{ object.get_absolute_url }}">{{ object }}</a> [{{ object.modification_time }}]<br />
 <div class="list_left">{{ object.get_type_class }}</div>
 </div>
 </li>
