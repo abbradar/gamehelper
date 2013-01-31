@@ -53,7 +53,10 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/users/login/'
+# TODO: Until Django 1.5
+from django.core.urlresolvers import reverse_lazy
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = reverse_lazy('root')
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
@@ -184,8 +187,6 @@ LOGGING = {
     },
   }
 }
-
-LOGIN_REDIRECT_URL = '/'
 
 APPEND_SLASH = True
 

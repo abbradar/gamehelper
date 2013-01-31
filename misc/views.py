@@ -28,8 +28,9 @@ class DynamicView(DynamicViewMixin, View):
 # supports such tricks in the future.
 # TODO: as of now it raises "It Worked!" page instead of normal debug
 # page when DEBUG=True and no URLs configured
-class DynamicResolveView(DynamicViewMixin):
-  def __init__(self):
+class DynamicResolveView(DynamicView):
+  def __init__(self, **kwargs):
+    super(DynamicResolveView, self).__init__(**kwargs)
     self._cache = {}
   
   def get_resolver(self, name):
