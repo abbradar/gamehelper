@@ -12,6 +12,7 @@
 {% if object.active != 1 %}
 {% trans "Game is not active!" %}
 {% endif %}
+{{ object.description|linebreaks|escape|truncatewords:100 }}
 </div>
 </li>
 {% endblock %}

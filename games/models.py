@@ -13,7 +13,7 @@ class Type(models.Model):
     return game_types.classes[self.type]
 
 class Game(Type):
-  name = models.CharField(verbose_name=_('Name'), max_length=30)
+  name = models.CharField(verbose_name=_('Title'), max_length=30)
   description = models.TextField(blank=True, verbose_name=_('Description'))
   creation_time = models.DateTimeField(auto_now_add=True, editable=False)
   modification_time = models.DateTimeField(auto_now=True, editable=False)
